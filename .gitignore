@@ -38,4 +38,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local lead capture fallback (contains PII — never commit)
+/data/leads.csv
 next-env.d.ts

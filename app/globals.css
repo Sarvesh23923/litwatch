@@ -1,26 +1,198 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/* Matter — licensed family, self-hosted from public/fonts/matter/    */
+/* If a file ever goes missing the browser silently falls through to  */
+/* the fallback stack — nothing breaks.                               */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-RegularItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-SemiBoldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-Heavy.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Matter";
+  src: url("/fonts/matter/Matter-HeavyItalic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand anchors */
+  --color-primary: #371e71;
+  --color-primary-dark: #241350;
+  --color-primary-soft: #5b3f9c;
+
+  /* Pale lavender — derived from primary, for backgrounds/washes */
+  --color-lavender-50: #f4f1fb;
+  --color-lavender-100: #ebe5f6;
+  --color-lavender-200: #d9cded;
+
+  /* Secondary anchor */
+  --color-secondary: #c9af80;
+  --color-secondary-dark: #a88c5c;
+
+  /* Warm cream — derived from secondary */
+  --color-cream-50: #faf6ee;
+  --color-cream-100: #f3ead9;
+
+  /* Neutrals */
+  --color-offwhite: #faf9f6;
+  --color-neutral-50: #f5f4f2;
+  --color-neutral-100: #ece9e6;
+  --color-border: #e4e0e8;
+  --color-muted: #6f6b78;
+  --color-ink: #18151f;
+
+  --background: var(--color-offwhite);
+  --foreground: var(--color-ink);
+
+  --font-matter:
+    "Matter", "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-soft: var(--color-primary-soft);
+
+  --color-lavender-50: var(--color-lavender-50);
+  --color-lavender-100: var(--color-lavender-100);
+  --color-lavender-200: var(--color-lavender-200);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-dark: var(--color-secondary-dark);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+
+  --color-offwhite: var(--color-offwhite);
+  --color-neutral-50: var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-border: var(--color-border);
+  --color-muted: var(--color-muted);
+  --color-ink: var(--color-ink);
+
+  --font-sans: var(--font-matter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-matter);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
