@@ -84,7 +84,7 @@ export function AIControlSection() {
 
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="mb-8 flex items-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender-100 to-cream-100 px-4 py-2 text-[12.5px] font-bold uppercase tracking-[0.14em] text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-lavender-100 to-cream-100 px-4 py-2 text-[14px] font-bold tracking-[0.14em] text-primary">
             <HugeiconsIcon icon={SparklesIcon} size={14} strokeWidth={2.5} />
             AI + human control
           </span>
@@ -101,8 +101,8 @@ export function AIControlSection() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-lavender-200">
                 <HugeiconsIcon icon={SparklesIcon} size={16} strokeWidth={2} className="text-primary" />
               </div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-primary">
-                AI Assistance
+              <p className="text-[15px] font-bold tracking-[0.1em] text-primary">
+                AI assistance
               </p>
             </div>
             <div className="space-y-3">
@@ -142,8 +142,8 @@ export function AIControlSection() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cream-100 to-cream-200">
                 <HugeiconsIcon icon={UserIcon} size={16} strokeWidth={2} className="text-secondary-dark" />
               </div>
-              <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-secondary-dark">
-                Your Control
+              <p className="text-[15px] font-bold tracking-[0.1em] text-secondary-dark">
+                Your control
               </p>
             </div>
             <div className="space-y-3">
@@ -181,7 +181,7 @@ export function AIControlSection() {
           <div className="lg:col-span-6">
             <div data-control="visual" className="relative">
               <div className="mb-6 flex items-center justify-between">
-                <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-muted">
+                <p className="text-[13px] font-bold tracking-[0.1em] text-muted">
                   Handoff workflow
                 </p>
                 <div className="flex items-center gap-2 rounded-full bg-neutral-100 px-3 py-1.5">

@@ -120,7 +120,7 @@ export function ControlTower({ onRequestDemo }: { onRequestDemo: () => void }) {
   return (
     <section id="control-tower" ref={rootRef} className="border-y border-border bg-lavender-50 py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span data-tower="item" className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-muted">
+        <span data-tower="item" className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           Practice control tower
         </span>
@@ -141,7 +141,7 @@ export function ControlTower({ onRequestDemo }: { onRequestDemo: () => void }) {
               key={f.key}
               type="button"
               onClick={() => setFilter(f.key)}
-              className={`rounded-[3px] border px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+              className={`h-[39px] rounded-[11.7px] border px-[15px] py-[10px] text-[13px] font-medium transition-colors ${
                 filter === f.key
                   ? "border-primary bg-primary text-white"
                   : "border-border bg-white text-ink/60 hover:border-primary/40 hover:text-ink"
@@ -156,7 +156,7 @@ export function ControlTower({ onRequestDemo }: { onRequestDemo: () => void }) {
           data-tower="item"
           className="mt-6 overflow-hidden rounded-lg border border-border bg-white"
         >
-          <div className="grid grid-cols-[1.4fr_1.4fr_1fr_1fr] gap-3 border-b border-border px-5 py-3 text-[11px] font-medium uppercase tracking-[0.08em] text-muted">
+          <div className="grid grid-cols-[1.4fr_1.4fr_1fr_1fr] gap-3 border-b border-border px-5 py-3 text-[11px] font-medium tracking-[0.08em] text-muted">
             <span>Client</span>
             <span>Notice type</span>
             <span>Deadline</span>
@@ -195,7 +195,7 @@ export function ControlTower({ onRequestDemo }: { onRequestDemo: () => void }) {
           type="button"
           onClick={handleCtaClick}
           data-tower="item"
-          className="group relative mt-10 inline-flex items-center gap-2 overflow-hidden rounded-[3px] bg-primary px-6 py-3.5 text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          className="group relative mt-10 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           Request a demo
           <HugeiconsIcon

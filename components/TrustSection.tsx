@@ -75,7 +75,7 @@ export function TrustSection() {
   return (
     <section id="trust" ref={rootRef} className="py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-muted">
+        <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           For consultants
         </span>

@@ -72,7 +72,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
         <div className="flex flex-col justify-center lg:col-span-5">
           <span
             data-hero="eyebrow"
-            className="mb-6 inline-flex w-fit items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-primary"
+            className="mb-6 inline-flex w-fit items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-primary"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
             AI-powered GST notice management
@@ -107,7 +107,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
               onClick={(e) =>
                 handleCtaClick(e, "rgba(201,175,128,0.45)", onRequestDemo)
               }
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[3px] bg-primary px-6 py-3.5 text-[14.5px] font-medium text-white transition-[background-color,transform] duration-200 hover:bg-primary-dark active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-[background-color,transform] duration-200 hover:bg-primary-dark active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Request a demo
               <HugeiconsIcon
@@ -121,7 +121,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
               href="#workflow"
               data-hero="cta-btn"
               onClick={(e) => handleCtaClick(e, "rgba(55,30,113,0.1)")}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[3px] border border-ink/15 bg-transparent px-6 py-3.5 text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-primary hover:bg-lavender-50 hover:text-primary active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 bg-transparent px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-primary hover:bg-lavender-50 hover:text-primary active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Explore how it works
               <HugeiconsIcon

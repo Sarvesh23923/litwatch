@@ -176,14 +176,14 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
             <button
               type="button"
               onClick={handleClose}
-              className="mt-8 rounded-[3px] border border-border px-5 py-2.5 text-[13.5px] font-medium text-ink transition-colors hover:bg-neutral-50"
+              className="mt-8 h-[39px] rounded-[11.7px] border border-border px-[15px] py-[10px] text-[13.5px] font-medium text-ink transition-colors hover:bg-neutral-50"
             >
               Close
             </button>
           </div>
         ) : (
           <div className="px-7 pb-8 pt-16 sm:px-8 sm:pt-9">
-            <p className="mb-1.5 text-[11.5px] font-medium uppercase tracking-[0.12em] text-muted">
+            <p className="mb-1.5 text-[13.5px] font-medium tracking-[0.12em] text-muted">
               Request a demo
             </p>
             <h3 className="mb-6 text-[21px] font-semibold text-ink">
@@ -310,7 +310,7 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
                 disabled={status === "submitting"}
                 onClick={(e) => handleRippleClick(e)}
                 data-lead="field"
-                className="relative mt-2 w-full overflow-hidden rounded-[3px] bg-primary px-5 py-3 text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+                className="relative mt-2 inline-flex h-[39px] items-center justify-center overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {status === "submitting" ? "Sending…" : "Request a demo"}
               </button>

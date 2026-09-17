@@ -53,7 +53,7 @@ export function NoticeJourneyCard() {
           </p>
           <p className="text-[12px] text-muted">Section 73 notice</p>
         </div>
-        <span className="rounded-[3px] bg-lavender-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.06em] text-primary">
+        <span className="rounded-[3px] bg-lavender-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
           Live case
         </span>
       </div>
@@ -74,7 +74,7 @@ export function NoticeJourneyCard() {
               >
                 <HugeiconsIcon icon={stage.icon} size={14} strokeWidth={2} />
               </div>
-              <span className="text-[10.5px] font-medium uppercase tracking-[0.06em] text-muted">
+              <span className="text-[10.5px] font-medium tracking-[0.06em] text-muted">
                 {stage.label}
               </span>
             </div>
@@ -141,7 +141,7 @@ export function NoticeJourneyCard() {
             <p className="text-[13px] font-medium text-ink">
               Draft reply generated
             </p>
-            <span className="rounded-[3px] bg-lavender-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.06em] text-primary">
+            <span className="rounded-[3px] bg-lavender-100 px-2 py-0.5 text-[10px] font-medium tracking-[0.06em] text-primary">
               AI-assisted
             </span>
           </div>
@@ -160,7 +160,7 @@ export function NoticeJourneyCard() {
         <div data-journey="panel" className="absolute inset-0" style={{ opacity: 0 }}>
           <div className="mb-4 flex items-center justify-between">
             <p className="text-[13px] font-medium text-ink">Case tracked</p>
-            <span className="rounded-[3px] bg-neutral-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.06em] text-ink/70">
+            <span className="rounded-[3px] bg-neutral-100 px-2 py-0.5 text-[10px] font-medium tracking-[0.06em] text-ink/70">
               In progress
             </span>
           </div>

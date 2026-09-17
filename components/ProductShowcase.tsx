@@ -86,17 +86,17 @@ function BoardPanel() {
         data-showcase="item"
         className="mb-6 grid grid-cols-[1.5fr_1.3fr_1fr_1fr_0.8fr] gap-4 rounded-lg bg-lavender-50 p-4"
       >
-        <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-primary">
+        <span className="flex items-center gap-2 text-[11px] font-bold tracking-[0.1em] text-primary">
           <HugeiconsIcon icon={UserIcon} size={12} strokeWidth={2} />
           Client
         </span>
-        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-primary">Notice type</span>
-        <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-primary">
+        <span className="text-[11px] font-bold tracking-[0.1em] text-primary">Notice type</span>
+        <span className="flex items-center gap-2 text-[11px] font-bold tracking-[0.1em] text-primary">
           <HugeiconsIcon icon={Calendar01Icon} size={12} strokeWidth={2} />
           Deadline
         </span>
-        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-primary">Status</span>
-        <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-primary">Amount</span>
+        <span className="text-[11px] font-bold tracking-[0.1em] text-primary">Status</span>
+        <span className="text-[11px] font-bold tracking-[0.1em] text-primary">Amount</span>
       </div>
       <div className="space-y-2">
         {NOTICES.map((n, idx) => (
@@ -196,7 +196,7 @@ function DetailPanel() {
             className="group relative overflow-hidden rounded-xl border border-border bg-white p-4 transition-all hover:border-primary/30 hover:shadow-md"
           >
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-muted">{f.label}</p>
+              <p className="text-[11px] font-bold tracking-wider text-muted">{f.label}</p>
               <div className="rounded-lg bg-lavender-50 p-2 transition-colors group-hover:bg-lavender-100">
                 <HugeiconsIcon icon={f.icon} size={14} strokeWidth={2} className="text-primary" />
               </div>
@@ -277,16 +277,16 @@ function DraftPanel() {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <button data-showcase="item" className="group flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-3 text-[13px] font-semibold text-ink shadow-sm transition-all hover:border-primary/30 hover:bg-lavender-50 hover:shadow-md">
+        <button data-showcase="item" className="group flex h-[39px] items-center gap-[10px] rounded-[11.7px] border border-border bg-white px-[15px] py-[10px] text-[13px] font-semibold text-ink shadow-sm transition-all hover:border-primary/30 hover:bg-lavender-50 hover:shadow-md">
           <HugeiconsIcon icon={PencilEdit01Icon} size={16} strokeWidth={2} />
           Edit draft
         </button>
-        <button data-showcase="item" className="group flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-primary-dark px-4 py-3 text-[13px] font-semibold text-white shadow-md transition-all hover:shadow-lg">
+        <button data-showcase="item" className="group flex h-[39px] items-center gap-[10px] rounded-[11.7px] border border-transparent bg-gradient-to-r from-primary to-primary-dark px-[15px] py-[10px] text-[13px] font-semibold text-white shadow-md transition-all hover:shadow-lg">
           <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} strokeWidth={2} />
           Approve & send
           <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5" />
         </button>
-        <button data-showcase="item" className="group flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-3 text-[13px] font-semibold text-ink shadow-sm transition-all hover:border-primary/30 hover:bg-lavender-50 hover:shadow-md">
+        <button data-showcase="item" className="group flex h-[39px] items-center gap-[10px] rounded-[11.7px] border border-border bg-white px-[15px] py-[10px] text-[13px] font-semibold text-ink shadow-sm transition-all hover:border-primary/30 hover:bg-lavender-50 hover:shadow-md">
           <HugeiconsIcon icon={Exchange01Icon} size={16} strokeWidth={2} />
           Regenerate
         </button>
@@ -316,7 +316,7 @@ function TrackingPanel() {
               <p className="text-[12px] text-ink/60">ABC Industries · Section 73</p>
             </div>
           </div>
-          <span className="rounded-[3px] bg-neutral-100 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.06em] text-ink/70">
+          <span className="rounded-[3px] bg-neutral-100 px-3 py-1.5 text-[11px] font-bold tracking-[0.06em] text-ink/70">
             In progress
           </span>
         </div>
@@ -447,7 +447,7 @@ export function ProductShowcase({ onRequestDemo }: { onRequestDemo: () => void }
   return (
     <section id="product" className="py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-muted">
+        <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           Product
         </span>
@@ -472,7 +472,7 @@ export function ProductShowcase({ onRequestDemo }: { onRequestDemo: () => void }
               }}
               type="button"
               onClick={() => setActiveTab(i)}
-              className={`relative flex items-center gap-2.5 rounded-lg px-5 py-3 text-[14px] font-semibold transition-all ${
+              className={`relative flex h-[39px] items-center gap-[10px] rounded-[11.7px] border border-transparent px-[15px] py-[10px] text-[14px] font-semibold transition-all ${
                 activeTab === i
                   ? "bg-lavender-50 text-primary shadow-sm"
                   : "text-ink/60 hover:bg-neutral-50 hover:text-ink"
@@ -514,7 +514,7 @@ export function ProductShowcase({ onRequestDemo }: { onRequestDemo: () => void }
             spawnRipple(gsap, e.currentTarget, e.clientX, e.clientY, "rgba(201,175,128,0.4)");
             onRequestDemo();
           }}
-          className="group relative mt-8 inline-flex items-center gap-2 overflow-hidden rounded-[3px] text-[14.5px] font-medium text-primary transition-colors hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="group relative mt-8 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-transparent px-[15px] py-[10px] text-[14.5px] font-medium text-primary transition-colors hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           See it on your own notices
           <HugeiconsIcon

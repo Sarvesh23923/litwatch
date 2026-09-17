@@ -73,7 +73,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
           <p className="text-[15px] font-semibold text-ink">
             New notice detected
           </p>
-          <span className="rounded-[3px] bg-neutral-100 px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.06em] text-ink/60">
+          <span className="rounded-[3px] bg-neutral-100 px-2.5 py-1 text-[10.5px] font-medium tracking-[0.06em] text-ink/60">
             Auto-captured
           </span>
         </div>
@@ -125,7 +125,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
 
     return (
       <div className="space-y-5">
-        <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.06em] text-primary">
+        <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
           <HugeiconsIcon icon={AiMagicIcon} size={12} strokeWidth={2} />
           AI classification complete
         </span>
@@ -136,7 +136,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
               key={field.label}
               className="rounded-md border border-border bg-neutral-50 p-4"
             >
-              <p className="text-[10.5px] font-medium uppercase tracking-[0.06em] text-muted">
+              <p className="text-[10.5px] font-medium tracking-[0.06em] text-muted">
                 {field.label}
               </p>
               <p className="mt-1.5 text-[14px] font-medium text-ink">
@@ -161,7 +161,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
           <p className="text-[15px] font-semibold text-ink">
             Draft ready for review
           </p>
-          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.06em] text-primary">
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
             <HugeiconsIcon icon={AiMagicIcon} size={12} strokeWidth={2} />
             AI-assisted
           </span>
@@ -217,7 +217,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <p className="text-[15px] font-semibold text-ink">Case timeline</p>
-        <span className="rounded-[3px] bg-neutral-100 px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.06em] text-ink/70">
+        <span className="rounded-[3px] bg-neutral-100 px-2.5 py-1 text-[10.5px] font-medium tracking-[0.06em] text-ink/70">
           In progress
         </span>
       </div>
@@ -296,7 +296,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
   }, [reducedMotion]);
 
   const eyebrow = (
-    <span className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-muted">
+    <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
       <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
       How it works
     </span>
@@ -312,7 +312,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
     <button
       type="button"
       onClick={handleCtaClick}
-      className="group relative mt-6 inline-flex items-center gap-2 overflow-hidden rounded-[3px] text-[14.5px] font-medium text-primary transition-colors hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="group relative mt-6 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-transparent px-[15px] py-[10px] text-[14.5px] font-medium text-primary transition-colors hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
       Request a demo
       <HugeiconsIcon
@@ -360,7 +360,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
                         )}
                       </div>
                       <div className="ml-4 pt-1.5">
-                        <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted">
+                        <p className="text-[11px] font-medium tracking-[0.08em] text-muted">
                           {stage.number}
                         </p>
                         <p className="text-[15px] font-medium text-ink">
@@ -427,7 +427,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
                   <HugeiconsIcon icon={stage.icon} size={15} strokeWidth={1.8} />
                 </div>
                 <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted">
+                  <p className="text-[11px] font-medium tracking-[0.08em] text-muted">
                     {stage.number}
                   </p>
                   <p className="text-[15px] font-medium text-ink">

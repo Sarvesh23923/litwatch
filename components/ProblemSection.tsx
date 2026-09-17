@@ -172,7 +172,7 @@ export function ProblemSection() {
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <span className="mb-5 inline-flex items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-muted">
+            <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
               The problem
             </span>

@@ -64,7 +64,7 @@ export function FinalCTA({ onRequestDemo }: { onRequestDemo: () => void }) {
             <button
               type="button"
               onClick={(e) => handleCtaClick(e, "rgba(201,175,128,0.45)", onRequestDemo)}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[3px] bg-primary px-6 py-3.5 text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Request a demo
               <HugeiconsIcon
@@ -77,7 +77,7 @@ export function FinalCTA({ onRequestDemo }: { onRequestDemo: () => void }) {
             <a
               href="#workflow"
               onClick={(e) => handleCtaClick(e, "rgba(55,30,113,0.1)")}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-[3px] border border-ink/15 px-6 py-3.5 text-[14.5px] font-medium text-ink transition-colors hover:border-primary hover:bg-lavender-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors hover:border-primary hover:bg-lavender-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               See how it works
               <HugeiconsIcon
