@@ -305,15 +305,16 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
                 </p>
               )}
 
-              <button
-                type="submit"
-                disabled={status === "submitting"}
-                onClick={(e) => handleRippleClick(e)}
-                data-lead="field"
-                className="relative mt-2 inline-flex h-[39px] items-center justify-center overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {status === "submitting" ? "Sending…" : "Request a demo"}
-              </button>
+              <div data-lead="field" className="mt-2 flex justify-center">
+                <button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  onClick={(e) => handleRippleClick(e)}
+                  className="relative inline-flex h-[39px] items-center justify-center overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {status === "submitting" ? "Sending…" : "Request a demo"}
+                </button>
+              </div>
             </form>
           </div>
         )}

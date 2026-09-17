@@ -45,7 +45,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
   return (
     <section id="features" ref={rootRef} className="py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+        <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           Features
         </span>
@@ -192,19 +192,21 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCtaClick}
-          className="group relative mt-12 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors hover:border-primary hover:bg-lavender-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        >
-          See it on your notices
-          <HugeiconsIcon
-            icon={ArrowRight02Icon}
-            size={16}
-            strokeWidth={2}
-            className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-          />
-        </button>
+        <div className="mt-12 flex justify-center">
+          <button
+            type="button"
+            onClick={handleCtaClick}
+            className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-secondary bg-secondary px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-secondary-dark hover:bg-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            See it on your notices
+            <HugeiconsIcon
+              icon={ArrowRight02Icon}
+              size={16}
+              strokeWidth={2}
+              className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+            />
+          </button>
+        </div>
       </div>
     </section>
   );

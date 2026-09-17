@@ -172,7 +172,7 @@ export function ProblemSection() {
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+            <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
               The problem
             </span>
@@ -251,19 +251,20 @@ export function ProblemSection() {
             </div>
           </div>
 
-          <div className="hidden items-center lg:col-span-7 lg:flex">
-            <div
-              data-problem="visual"
-              className="relative mx-auto h-[520px] w-full max-w-[680px]"
-            >
+          <div className="flex items-center justify-center lg:col-span-7">
+            <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden sm:h-[380px] md:h-[460px] lg:h-[520px]">
               <div
-                aria-hidden
-                className="absolute inset-0 -z-10"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)",
-                }}
-              />
+                data-problem="visual"
+                className="relative h-[520px] w-[680px] shrink-0 origin-center scale-[0.56] sm:scale-[0.72] md:scale-[0.86] lg:scale-100"
+              >
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)",
+                  }}
+                />
 
               {FRAGMENTS.map((frag) => (
                 <div
@@ -344,6 +345,7 @@ export function ProblemSection() {
                     <span className="text-[13px] font-semibold text-primary">Clarity</span>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           </div>

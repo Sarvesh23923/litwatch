@@ -53,6 +53,11 @@ const PILLARS: Pillar[] = [
   },
 ];
 
+const STATS = [
+  { value: "100%", label: "of drafts reviewed by a consultant before they go out" },
+  { value: "0", label: "notices sent without a human sign-off" },
+];
+
 export function TrustSection() {
   const rootRef = useRef<HTMLElement>(null);
 
@@ -75,7 +80,7 @@ export function TrustSection() {
   return (
     <section id="trust" ref={rootRef} className="py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+        <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           For consultants
         </span>
@@ -84,20 +89,67 @@ export function TrustSection() {
           accountability.
         </h2>
 
-        <div className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {PILLARS.map((pillar) => (
-            <div key={pillar.title} data-trust="item" className="flex gap-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-primary">
-                <HugeiconsIcon icon={pillar.icon} size={16} strokeWidth={1.8} />
-              </div>
-              <div>
-                <p className="text-[15px] font-medium text-ink">{pillar.title}</p>
-                <p className="mt-1 text-[13.5px] leading-relaxed text-ink/60">
-                  {pillar.description}
-                </p>
-              </div>
+        <div className="mt-14 grid grid-cols-12 gap-6">
+          <div
+            data-trust="item"
+            className="relative col-span-12 flex flex-col justify-between overflow-hidden rounded-lg bg-gradient-to-br from-secondary to-secondary-dark p-8 text-ink lg:col-span-4"
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(24,21,31,0.07) 1px, transparent 1px)",
+                backgroundSize: "18px 18px",
+                maskImage:
+                  "radial-gradient(ellipse 90% 90% at 100% 0%, black 0%, transparent 70%)",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse 90% 90% at 100% 0%, black 0%, transparent 70%)",
+              }}
+            />
+            <div className="relative flex flex-col gap-7">
+              {STATS.map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-[40px] font-semibold leading-none tracking-[-0.02em]">
+                    {stat.value}
+                  </p>
+                  <p className="mt-2 max-w-[240px] text-[13.5px] leading-relaxed text-ink/65">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
+            <p className="relative mt-8 border-t border-ink/10 pt-5 text-[13px] leading-relaxed text-ink/55">
+              Litwatch drafts, tracks and organizes. You stay the one making
+              the call.
+            </p>
+          </div>
+
+          <div
+            data-trust="item"
+            className="col-span-12 overflow-hidden rounded-lg border border-border bg-white lg:col-span-8"
+          >
+            <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-y-0">
+              {PILLARS.map((pillar, i) => (
+                <div
+                  key={pillar.title}
+                  className={`flex gap-4 p-6 transition-colors hover:bg-lavender-50/40 ${
+                    i % 2 === 0 ? "sm:border-r sm:border-border" : ""
+                  } ${i < PILLARS.length - 2 ? "sm:border-b sm:border-border" : ""}`}
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-lavender-50 text-primary">
+                    <HugeiconsIcon icon={pillar.icon} size={18} strokeWidth={1.8} />
+                  </div>
+                  <div>
+                    <p className="text-[15px] font-medium text-ink">{pillar.title}</p>
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-ink/60">
+                      {pillar.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

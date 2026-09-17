@@ -91,7 +91,7 @@ export function NoticeJourneyCard() {
       </div>
 
       {/* Stage content — stacked panels, cross-faded by GSAP */}
-      <div className="relative h-[220px] sm:h-[196px]">
+      <div className="relative h-[180px] sm:h-[168px]">
         {/* Ingest */}
         <div data-journey="panel" className="absolute inset-0" style={{ opacity: 1 }}>
           <p className="mb-4 text-[13px] font-medium text-ink">
