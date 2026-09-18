@@ -14,8 +14,9 @@ export function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/images/logo.svg" alt="Litwatch" className="h-auto w-[140px] sm:w-[180px] lg:w-[220px]" />
             <p className="mt-3 text-[13.5px] leading-relaxed text-ink/55">
-              AI-powered GST notice management, built for tax consultants
-              and CA firms.
+              {/* AI-powered GST notice management, built for tax consultants
+              and CA firms. */}
+              Built for consultants. Governed by statute. Approved by you
             </p>
           </div>
 

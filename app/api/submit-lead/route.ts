@@ -19,7 +19,6 @@ const REQUIRED_FIELDS: (keyof LeadPayload)[] = [
   "email",
   "phone",
   "company",
-  "practiceSize",
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

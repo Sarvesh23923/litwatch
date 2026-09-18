@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
@@ -137,6 +137,9 @@ const PROBLEMS = [
 
 export function ProblemSection() {
   const rootRef = useRef<HTMLElement>(null);
+  const visualRef = useRef<HTMLDivElement>(null);
+  const visualWrapRef = useRef<HTMLDivElement>(null);
+  const [visualScale, setVisualScale] = useState(1);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -154,11 +157,24 @@ export function ProblemSection() {
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    const updateScale = () => {
+      const width = window.innerWidth;
+      const nextScale =
+        width < 420 ? 0.62 : width < 520 ? 0.72 : width < 768 ? 0.82 : 1;
+      setVisualScale(nextScale);
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, []);
+
   return (
     <section
       id="problem"
       ref={rootRef}
-      className="relative overflow-hidden border-y border-border bg-gradient-to-b from-lavender-50 via-lavender-50/50 to-white py-24 lg:py-32"
+      className="relative overflow-hidden border-y border-border bg-gradient-to-b from-lavender-50 via-lavender-50/50 to-white py-16 sm:py-20 lg:py-32"
     >
       <div
         aria-hidden
@@ -170,57 +186,57 @@ export function ProblemSection() {
       />
 
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col items-start justify-between gap-3 sm:mb-10 lg:mb-12">
           <div>
-            <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+            <span className="mb-2 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.14em] text-muted sm:text-[14px]">
               <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
               The problem
             </span>
 
-            <h2 className="max-w-[760px] text-[32px] font-semibold leading-[1.15] tracking-[-0.015em] text-ink sm:text-[38px] lg:text-[42px]">
+            <h2 className="max-w-[760px] text-[28px] font-semibold leading-[1.15] tracking-[-0.015em] text-ink sm:text-[32px] lg:text-[42px]">
               GST notices shouldn&apos;t live in scattered inboxes, portals and
               spreadsheets.
             </h2>
           </div>
         </div>
 
-        <div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-8 grid gap-8 sm:gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
-            <div className="grid gap-5">
+            <div className="grid gap-3 sm:gap-4 lg:gap-5">
               {PROBLEMS.map((problem, index) => (
                 <div
                   key={problem.index}
-                  className="group relative overflow-hidden rounded-lg border border-border bg-white p-6 shadow-[0_1px_3px_rgba(24,21,31,0.04)] transition-all duration-300 hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.12)] hover:border-primary/30"
+                  className="group relative overflow-hidden rounded-lg border border-border bg-white p-4 shadow-[0_1px_3px_rgba(24,21,31,0.04)] transition-all duration-300 hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.12)] hover:border-primary/30 sm:p-5 lg:p-6"
                   style={{
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
-                  <div className="absolute right-4 top-4 flex items-center gap-2">
-                    <span className="rounded-full bg-lavender-100 px-2.5 py-1 text-[11px] font-semibold text-primary">
+                  <div className="absolute right-3 top-3 flex items-center gap-2 sm:right-4 sm:top-4">
+                    <span className="hidden rounded-full bg-lavender-100 px-2.5 py-1 text-[11px] font-semibold text-primary sm:inline-flex">
                       {problem.stat}
                     </span>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-cream-100 transition-transform duration-300 group-hover:scale-110">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-cream-100 transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
                       <HugeiconsIcon
                         icon={problem.icon}
-                        size={18}
+                        size={16}
                         strokeWidth={2}
-                        className="text-primary"
+                        className="text-primary sm:text-[18px]"
                       />
                     </div>
                     
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="mb-2 flex items-center gap-3">
                         <span className="text-[11px] font-bold text-secondary-dark">
                           {problem.index}
                         </span>
-                        <h3 className="text-[16px] font-semibold text-ink">
+                        <h3 className="text-[15px] font-semibold text-ink sm:text-[16px]">
                           {problem.title}
                         </h3>
                       </div>
-                      <p className="text-[13.5px] leading-relaxed text-ink/65">
+                      <p className="text-[12.5px] leading-relaxed text-ink/65 sm:text-[13.5px]">
                         {problem.body}
                       </p>
                     </div>
@@ -231,19 +247,19 @@ export function ProblemSection() {
               ))}
             </div>
 
-            <div className="mt-6 rounded-lg border border-orange-200 bg-orange-50/50 p-4">
+            <div className="mt-4 rounded-lg border border-orange-200 bg-orange-50/50 p-3 sm:mt-6 sm:p-4">
               <div className="flex items-start gap-3">
                 <HugeiconsIcon
                   icon={FlashIcon}
-                  size={18}
+                  size={16}
                   strokeWidth={1.8}
-                  className="mt-0.5 shrink-0 text-orange-600"
+                  className="mt-0.5 shrink-0 text-orange-600 sm:text-[18px]"
                 />
                 <div>
-                  <p className="text-[13px] font-medium text-orange-900">
+                  <p className="text-[12.5px] font-medium text-orange-900 sm:text-[13px]">
                     The cost of chaos
                   </p>
-                  <p className="mt-1 text-[12px] text-orange-800/70">
+                  <p className="mt-1 text-[11.5px] text-orange-800/70 sm:text-[12px]">
                     Tax consultants spend 40% of their time just organizing information before they can even start working on responses.
                   </p>
                 </div>
@@ -252,10 +268,21 @@ export function ProblemSection() {
           </div>
 
           <div className="flex items-center justify-center lg:col-span-7">
-            <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden sm:h-[380px] md:h-[460px] lg:h-[520px]">
+            <div
+              ref={visualWrapRef}
+              className="relative flex w-full max-w-[680px] items-center justify-center overflow-hidden"
+              style={{
+                minHeight: visualScale < 1 ? `${Math.round(520 * visualScale)}px` : undefined,
+              }}
+            >
               <div
+                ref={visualRef}
                 data-problem="visual"
-                className="relative h-[520px] w-[680px] shrink-0 origin-center scale-[0.56] sm:scale-[0.72] md:scale-[0.86] lg:scale-100"
+                className="relative aspect-[680/520] w-full max-w-[680px] shrink-0 origin-center"
+                style={{
+                  transform: `scale(${visualScale})`,
+                  transformOrigin: "center center",
+                }}
               >
                 <div
                   aria-hidden
@@ -273,11 +300,12 @@ export function ProblemSection() {
                   data-dx={frag.dx}
                   data-dy={frag.dy}
                   style={{
-                    top: frag.top,
-                    left: frag.left,
+                    top: `${(frag.top / 520) * 100}%`,
+                    left: `${(frag.left / 680) * 100}%`,
                     transform: `rotate(${frag.rotate}deg)`,
+                    width: "clamp(110px, 27vw, 190px)",
                   }}
-                  className="absolute flex w-[190px] items-center gap-3 rounded-lg border border-border bg-white px-4 py-3.5 shadow-[0_4px_12px_-4px_rgba(24,21,31,0.1),0_20px_40px_-20px_rgba(24,21,31,0.15)] backdrop-blur-sm transition-shadow hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.2)]"
+                  className="absolute flex items-center gap-3 rounded-lg border border-border bg-white px-3 py-2 shadow-[0_4px_12px_-4px_rgba(24,21,31,0.1),0_20px_40px_-20px_rgba(24,21,31,0.15)] backdrop-blur-sm transition-shadow hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.2)] sm:px-4 sm:py-3.5"
                 >
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-neutral-50 to-neutral-100">
                     <HugeiconsIcon
@@ -288,11 +316,11 @@ export function ProblemSection() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <span className="block truncate text-[13px] font-medium text-ink">
+                    <span className="block truncate text-[11.5px] font-medium text-ink sm:text-[13px]">
                       {frag.label}
                     </span>
                     {frag.badge && (
-                      <span className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-semibold text-red-700">
+                      <span className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-[8px] font-semibold text-red-700 sm:text-[9px]">
                         <HugeiconsIcon icon={Alert01Icon} size={9} strokeWidth={2.4} />
                         {frag.badge}
                       </span>
@@ -302,8 +330,8 @@ export function ProblemSection() {
               ))}
 
               <div
-                className="absolute flex h-[180px] w-[280px] items-center justify-center"
-                style={{ top: 170, left: 200 }}
+                className="absolute flex items-center justify-center"
+                style={{ top: "32.7%", left: "29.4%", width: "41.2%", height: "34.6%" }}
               >
                 <div
                   data-problem="target-outline"

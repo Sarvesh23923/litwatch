@@ -3,9 +3,21 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Litwatch — AI-powered GST notice management for tax consultants",
+  title: "AI-assisted GST notice management for tax consultants, CA firms and businesses",
   description:
-    "Litwatch helps tax consultants ingest, classify, draft and track GST notices across clients — with AI doing the heavy lifting and you staying in control.",
+    "Manage GST notices across clients and GSTINs with LitWatch. Track deadlines, validate notice data, create AI-assisted drafts and manage cases in one controlled workflow",
+  keywords: [
+    "GST notice management",
+    "GST notice software",
+    "GST notice management software",
+    "GST notice tracking",
+    "GST compliance software",
+    "GST notice AI",
+    "GST software for CA",
+    "GST software for tax consultants",
+    "GST litigation management",
+    "GST notice tracker",
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

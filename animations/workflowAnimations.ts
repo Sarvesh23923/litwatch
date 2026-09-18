@@ -137,3 +137,125 @@ export function buildWorkflowPin(
 
   return trigger;
 }
+
+/**
+ * Same ring-of-icons visual as `buildWorkflowPin`, but instead of being
+ * scrubbed by scroll position, it spins on its own on an infinite timer —
+ * a real ferris wheel, always turning, synced with the info text, stage
+ * panel and progress bar the same way.
+ *
+ * `hideDistant` controls whether nodes away from the active slot fade/
+ * shrink out (the desktop "only ~3 nodes visible" look) or stay fully
+ * visible throughout the spin (used below 1024px, where there's no
+ * side-by-side layout pressure forcing nodes to declutter).
+ */
+export function buildWorkflowAutoRotate(
+  gsap: typeof GsapType,
+  root: HTMLElement,
+  activeSlotAngle = 0,
+  options: { hideDistant?: boolean; secondsPerStage?: number } = {},
+) {
+  const { hideDistant = true, secondsPerStage = 6 } = options;
+
+  const panels = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="panel"]'),
+  );
+  const infos = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="info"]'),
+  );
+  const wheel = root.querySelector<HTMLElement>('[data-workflow="wheel"]');
+  const nodes = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="wheel-node"]'),
+  );
+  const nodeInners = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="wheel-node-inner"]'),
+  );
+  const progressBar = root.querySelector<HTMLElement>('[data-workflow="progress-bar"]');
+
+  const stageCount = panels.length;
+  if (stageCount < 2 || !wheel || nodes.length !== stageCount) return null;
+
+  const step = 360 / stageCount;
+  const baseAngles = nodes.map((_, i) => i * step);
+
+  gsap.set(nodes, { transformOrigin: "center center" });
+
+  function render(scrub: number) {
+    const wrapped = ((scrub % stageCount) + stageCount) % stageCount;
+    const index = Math.floor(wrapped);
+    const nextIndex = (index + 1) % stageCount;
+    const t = wrapped - index;
+    const rotation = -wrapped * step + activeSlotAngle;
+
+    gsap.set(wheel!, { rotate: rotation });
+
+    nodes.forEach((node, i) => {
+      const total = normalizeAngle(baseAngles[i] + rotation);
+
+      const dist = Math.abs(normalizeAngle(total - activeSlotAngle)) / 180;
+      // Inactive nodes always shrink a bit toward the wheel's edge so the
+      // active one reads as clearly "in front" — below 1024px they still
+      // stay fully visible (opacity untouched), just smaller.
+      const scale = gsap.utils.clamp(0.62, 1, 1 - dist * 0.6);
+
+      if (hideDistant) {
+        const neighborCutoff = (step / 180) * 1.5;
+        const fadeWidth = (step / 180) * 0.5;
+        const baseOpacity = gsap.utils.clamp(0.4, 1, 1 - dist * 0.65);
+        const fade = gsap.utils.clamp(0, 1, (neighborCutoff - dist) / fadeWidth);
+        gsap.set(node, { scale, opacity: baseOpacity * fade });
+      } else {
+        gsap.set(node, { scale, opacity: 1 });
+      }
+
+      gsap.set(nodeInners[i], { rotate: -total });
+    });
+
+    const crossStart = 0.72;
+    const cross = gsap.utils.clamp(0, 1, (t - crossStart) / (1 - crossStart));
+
+    panels.forEach((panel, i) => {
+      let opacity = 0;
+      let y = 16;
+      if (i === index) {
+        opacity = 1 - cross;
+        y = -16 * cross;
+      } else if (i === nextIndex) {
+        opacity = cross;
+        y = 16 * (1 - cross);
+      }
+      gsap.set(panel, { opacity, y });
+    });
+
+    infos.forEach((info, i) => {
+      let opacity = 0;
+      let y = 8;
+      if (i === index) {
+        opacity = 1 - cross;
+        y = -8 * cross;
+      } else if (i === nextIndex) {
+        opacity = cross;
+        y = 8 * (1 - cross);
+      }
+      gsap.set(info, { opacity, y });
+    });
+
+    if (progressBar) {
+      const pct = ((index + t) / stageCount) * 100;
+      gsap.set(progressBar, { width: `${pct}%` });
+    }
+  }
+
+  render(0);
+
+  const proxy = { progress: 0 };
+  const tween = gsap.to(proxy, {
+    progress: stageCount,
+    duration: stageCount * secondsPerStage,
+    ease: "none",
+    repeat: -1,
+    onUpdate: () => render(proxy.progress),
+  });
+
+  return tween;
+}

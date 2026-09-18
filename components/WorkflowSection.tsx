@@ -23,7 +23,7 @@ import {
 import { getGsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useMediaQuery } from "@/lib/useMediaQuery";
-import { buildWorkflowPin } from "@/animations/workflowAnimations";
+import { buildWorkflowPin, buildWorkflowAutoRotate } from "@/animations/workflowAnimations";
 
 interface Stage {
   key: string;
@@ -471,30 +471,43 @@ export function WorkflowSection() {
 
     const { gsap, ScrollTrigger } = getGsap();
     const section = sectionRef.current;
+    const tweens: ReturnType<typeof buildWorkflowAutoRotate>[] = [];
 
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
+      // Desktop (>=1024px) keeps the original scroll-scrubbed pin.
       mm.add("(min-width: 1024px)", () => {
         if (!pinRef.current) return;
         buildWorkflowPin(gsap, ScrollTrigger, pinRef.current, pinRef.current);
       });
 
+      // 1024px and below gets the always-running ferris-wheel auto-rotate
+      // instead, with every node visible (no side-by-side room to bleed
+      // the wheel off-canvas, so distance-based fade isn't needed here).
       mm.add("(max-width: 1023.98px)", () => {
         if (!mobilePinRef.current) return;
-        buildWorkflowPin(
-          gsap,
-          ScrollTrigger,
-          mobilePinRef.current,
-          mobilePinRef.current,
-          MOBILE_ACTIVE_SLOT_ANGLE,
+        tweens.push(
+          buildWorkflowAutoRotate(gsap, mobilePinRef.current, MOBILE_ACTIVE_SLOT_ANGLE, {
+            hideDistant: false,
+          }),
         );
       });
 
       return () => mm.revert();
     }, section);
 
-    return () => ctx.revert();
+    // Pause-on-hover — commented out for now. Uncomment to restore:
+    // const pause = () => tweens.forEach((tween) => tween?.pause());
+    // const resume = () => tweens.forEach((tween) => tween?.play());
+    // section.addEventListener("mouseenter", pause);
+    // section.addEventListener("mouseleave", resume);
+
+    return () => {
+      // section.removeEventListener("mouseenter", pause);
+      // section.removeEventListener("mouseleave", resume);
+      ctx.revert();
+    };
   }, [reducedMotion]);
 
   const eyebrow = (

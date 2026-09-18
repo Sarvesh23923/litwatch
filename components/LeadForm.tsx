@@ -32,6 +32,10 @@ const EMPTY_VALUES = {
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+type FieldErrors = Partial<Record<"name" | "email" | "phone" | "company", string>>;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -39,6 +43,7 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [values, setValues] = useState(EMPTY_VALUES);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleClose = () => {
     if (status === "submitting") return;
@@ -52,6 +57,7 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
       setTimeout(() => {
         setStatus("idle");
         setValues(EMPTY_VALUES);
+        setFieldErrors({});
       }, 0);
       return;
     }
@@ -65,6 +71,7 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
         onClose();
         setStatus("idle");
         setValues(EMPTY_VALUES);
+        setFieldErrors({});
       },
     });
   };
@@ -112,12 +119,34 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
 
   const update =
     (field: keyof typeof values) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setValues((v) => ({ ...v, [field]: e.target.value }));
+      if (field === "name" || field === "email" || field === "phone" || field === "company") {
+        setFieldErrors((errs) => ({ ...errs, [field]: undefined }));
+      }
+    };
+
+  const validate = (): FieldErrors => {
+    const errors: FieldErrors = {};
+    if (!values.name.trim()) errors.name = "Enter your full name.";
+    if (!values.email.trim()) errors.email = "Enter your work email.";
+    else if (!EMAIL_RE.test(values.email.trim())) errors.email = "Enter a valid work email.";
+    if (!values.phone.trim()) errors.phone = "Enter your phone number.";
+    if (!values.company.trim()) errors.company = "Enter your firm or organization.";
+    return errors;
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (status === "submitting") return;
+
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+    setFieldErrors({});
+
     setStatus("submitting");
     setErrorMsg("");
 
@@ -191,50 +220,80 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              <div data-lead="field">
+              <div data-lead="field" className="pb-5">
                 <label htmlFor="lead-name" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
                   Full name
                 </label>
-                <input
-                  ref={firstFieldRef}
-                  id="lead-name"
-                  required
-                  autoComplete="name"
-                  value={values.name}
-                  onChange={update("name")}
-                  className="w-full rounded-[3px] border border-border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    ref={firstFieldRef}
+                    id="lead-name"
+                    required
+                    autoComplete="name"
+                    value={values.name}
+                    onChange={update("name")}
+                    aria-invalid={Boolean(fieldErrors.name)}
+                    className={`w-full rounded-[3px] border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary ${
+                      fieldErrors.name ? "border-primary" : "border-border"
+                    }`}
+                  />
+                  {fieldErrors.name && (
+                    <p className="absolute left-0 top-full mt-1 text-[12px] text-primary">
+                      {fieldErrors.name}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <div data-lead="field">
+              <div data-lead="field" className="pb-5">
                 <label htmlFor="lead-email" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
                   Work email
                 </label>
-                <input
-                  id="lead-email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  value={values.email}
-                  onChange={update("email")}
-                  className="w-full rounded-[3px] border border-border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    id="lead-email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    value={values.email}
+                    onChange={update("email")}
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    className={`w-full rounded-[3px] border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary ${
+                      fieldErrors.email ? "border-primary" : "border-border"
+                    }`}
+                  />
+                  {fieldErrors.email && (
+                    <p className="absolute left-0 top-full mt-1 text-[12px] text-primary">
+                      {fieldErrors.email}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div data-lead="field">
+                <div data-lead="field" className="pb-5">
                   <label htmlFor="lead-phone" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
                     Phone number
                   </label>
-                  <input
-                    id="lead-phone"
-                    type="tel"
-                    required
-                    autoComplete="tel"
-                    value={values.phone}
-                    onChange={update("phone")}
-                    className="w-full rounded-[3px] border border-border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary"
-                  />
+                  <div className="relative">
+                    <input
+                      id="lead-phone"
+                      type="tel"
+                      required
+                      autoComplete="tel"
+                      value={values.phone}
+                      onChange={update("phone")}
+                      aria-invalid={Boolean(fieldErrors.phone)}
+                      className={`w-full rounded-[3px] border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary ${
+                        fieldErrors.phone ? "border-primary" : "border-border"
+                      }`}
+                    />
+                    {fieldErrors.phone && (
+                      <p className="absolute left-0 top-full mt-1 text-[12px] text-primary">
+                        {fieldErrors.phone}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div data-lead="field">
                   <label htmlFor="lead-city" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
@@ -250,27 +309,36 @@ export function LeadForm({ open, entryPoint, onClose }: LeadFormProps) {
                 </div>
               </div>
 
-              <div data-lead="field">
+              <div data-lead="field" className="pb-5">
                 <label htmlFor="lead-company" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
                   Firm / organization
                 </label>
-                <input
-                  id="lead-company"
-                  required
-                  autoComplete="organization"
-                  value={values.company}
-                  onChange={update("company")}
-                  className="w-full rounded-[3px] border border-border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    id="lead-company"
+                    required
+                    autoComplete="organization"
+                    value={values.company}
+                    onChange={update("company")}
+                    aria-invalid={Boolean(fieldErrors.company)}
+                    className={`w-full rounded-[3px] border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary ${
+                      fieldErrors.company ? "border-primary" : "border-border"
+                    }`}
+                  />
+                  {fieldErrors.company && (
+                    <p className="absolute left-0 top-full mt-1 text-[12px] text-primary">
+                      {fieldErrors.company}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div data-lead="field">
                 <label htmlFor="lead-practice-size" className="mb-1.5 block text-[12.5px] font-medium text-ink/70">
-                  Number of clients / practice size
+                  Number of clients / practice size <span className="text-ink/40">(optional)</span>
                 </label>
                 <select
                   id="lead-practice-size"
-                  required
                   value={values.practiceSize}
                   onChange={update("practiceSize")}
                   className="w-full rounded-[3px] border border-border bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition-colors focus:border-primary"

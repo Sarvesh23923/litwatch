@@ -100,9 +100,9 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
             data-hero="paragraph"
             className="mt-6 max-w-[480px] text-[16.5px] leading-relaxed text-ink/65"
           >
-            Litwatch helps tax consultants ingest, classify, draft and track
-            GST notices across clients — with AI doing the heavy lifting and
-            you staying in control.
+            LitWatch helps tax consultants manage GST notices across clients - 
+            from intake and classification to validation, drafting and tracking, 
+            with AI assisting and you staying in control.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
