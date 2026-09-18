@@ -98,9 +98,23 @@ export async function POST(request: Request) {
             ? { Authorization: `Bearer ${process.env.LEAD_API_KEY}` }
             : {}),
         },
-        body: JSON.stringify(payload),
+        // Google Apps Script Web Apps can't read custom headers, so the
+        // key also travels in the body for that integration path.
+        body: JSON.stringify({
+          ...payload,
+          ...(process.env.LEAD_API_KEY ? { apiKey: process.env.LEAD_API_KEY } : {}),
+        }),
       });
       if (!upstream.ok) throw new Error(`Upstream responded ${upstream.status}`);
+
+      // Apps Script always returns HTTP 200, so failures must be read
+      // from the body. Other integrations that omit `ok` are treated
+      // as successful based on status alone.
+      const data = await upstream.json().catch(() => null);
+      if (data && data.ok === false) {
+        throw new Error(data.error ?? "Upstream rejected the lead.");
+      }
+
       return NextResponse.json({ ok: true });
     } catch {
       return NextResponse.json(
