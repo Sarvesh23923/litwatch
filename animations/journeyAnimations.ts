@@ -1,14 +1,13 @@
 import type { gsap as GsapType } from "gsap";
 
 const HOLD = 1.9;
-const STAGE_COUNT = 4;
 
 /**
- * A looping, self-playing sequence: one notice moving through
- * Ingest → Classify → Draft → Track inside a single card. Panels are
- * stacked (absolute) and cross-fade; the stepper's connector lines fill
- * in sync so the stepper and the content always agree on what stage
- * is "active".
+ * A looping, self-playing sequence: one notice moving through every stage
+ * (Ingest → Classify → Validate → Analyse → Draft → Review → Track) inside
+ * a single card. Panels are stacked (absolute) and cross-fade; the
+ * stepper's connector lines fill in sync so the stepper and the content
+ * always agree on what stage is "active".
  */
 export function buildJourneyLoop(gsap: typeof GsapType, root: HTMLElement) {
   const panels = gsap.utils.toArray<HTMLElement>(
@@ -21,7 +20,9 @@ export function buildJourneyLoop(gsap: typeof GsapType, root: HTMLElement) {
     root.querySelectorAll('[data-journey="connector-fill"]'),
   );
 
-  if (panels.length !== STAGE_COUNT || dots.length !== STAGE_COUNT) {
+  const STAGE_COUNT = panels.length;
+
+  if (STAGE_COUNT < 2 || dots.length !== STAGE_COUNT) {
     return gsap.timeline();
   }
 

@@ -12,7 +12,7 @@ export function Footer() {
         <div className="flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-[320px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/logo.svg" alt="Litwatch" className="h-auto w-[220px]" />
+            <img src="/images/logo.svg" alt="Litwatch" className="h-auto w-[140px] sm:w-[180px] lg:w-[220px]" />
             <p className="mt-3 text-[13.5px] leading-relaxed text-ink/55">
               AI-powered GST notice management, built for tax consultants
               and CA firms.

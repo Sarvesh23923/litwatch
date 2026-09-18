@@ -53,11 +53,21 @@ export function buildWorkflowPin(
 
     gsap.set(wheel!, { rotate: rotation });
 
+    // Only the active node and its immediate neighbor on either side stay
+    // visible — anything further round the wheel fades fully out over a
+    // ramp (rather than snapping off) so a node sliding past the cutoff
+    // eases away instead of popping, keeping at most three nodes on
+    // screen at rest regardless of stage count.
+    const neighborCutoff = (step / 180) * 1.5;
+    const fadeWidth = (step / 180) * 0.5;
+
     nodes.forEach((node, i) => {
       const total = normalizeAngle(baseAngles[i] + rotation);
       const dist = Math.abs(normalizeAngle(total - activeSlotAngle)) / 180;
-      const scale = gsap.utils.clamp(0.82, 1, 1 - dist * 0.32);
-      const opacity = gsap.utils.clamp(0.4, 1, 1 - dist * 0.65);
+      const scale = gsap.utils.clamp(0.55, 1, 1 - dist * 0.75);
+      const baseOpacity = gsap.utils.clamp(0.4, 1, 1 - dist * 0.65);
+      const fade = gsap.utils.clamp(0, 1, (neighborCutoff - dist) / fadeWidth);
+      const opacity = baseOpacity * fade;
       gsap.set(node, { scale, opacity });
       gsap.set(nodeInners[i], { rotate: -total });
     });

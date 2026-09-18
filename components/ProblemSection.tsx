@@ -108,28 +108,28 @@ const PROBLEMS = [
   {
     index: "01",
     title: "Portal hopping",
-    body: "Notices arrive through email, GST portal, WhatsApp, and physical mail.",
+    body: "Notices arrive through email, GST portal, uploads and other channels.",
     icon: CloudIcon,
     stat: "4+ channels",
   },
   {
     index: "02",
     title: "Deadline pressure",
-    body: "Critical dates buried in PDFs while the clock keeps ticking.",
+    body: "Important response dates can be buried inside documents while the clock keeps moving.",
     icon: AlertDiamondIcon,
     stat: "15-30 days",
   },
   {
     index: "03",
-    title: "Manual drafting",
-    body: "Every response requires hours of repetitive legal groundwork.",
+    title: "Manual analysis",
+    body: "Reading notices, checking figures and understanding the officer's grounds takes time.",
     icon: Loading03Icon,
     stat: "3-5 hours",
   },
   {
     index: "04",
     title: "No central view",
-    body: "Teams lose track of which client needs attention when.",
+    body: "When managing multiple clients, it can be difficult to see every active notice and pending action.",
     icon: LegalDocument01Icon,
     stat: "50+ clients",
   },
@@ -302,8 +302,8 @@ export function ProblemSection() {
               ))}
 
               <div
-                className="absolute flex h-[140px] w-[220px] items-center justify-center"
-                style={{ top: 190, left: 230 }}
+                className="absolute flex h-[180px] w-[280px] items-center justify-center"
+                style={{ top: 170, left: 200 }}
               >
                 <div
                   data-problem="target-outline"
@@ -320,13 +320,13 @@ export function ProblemSection() {
                 </div>
                 <div
                   data-problem="target-solid"
-                  className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-3 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
+                  className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-4 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/logo.svg" alt="Litwatch" className="h-6 w-auto" />
+                  <img src="/images/logo.svg" alt="Litwatch" className="h-11 w-auto" />
                   <div className="flex items-center gap-1.5">
-                    <div className="h-1 w-1 rounded-full bg-green-500" />
-                    <span className="text-[10px] font-medium text-green-700">
+                    <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                    <span className="text-[12px] font-medium text-green-700">
                       All notices unified
                     </span>
                   </div>

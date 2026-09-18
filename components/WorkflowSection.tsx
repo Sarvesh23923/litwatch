@@ -5,10 +5,12 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
   AiMagicIcon,
-  ArrowRight02Icon,
+  Alert01Icon,
+  ChartAnalysisIcon,
   CheckmarkCircle02Icon,
   Clock01Icon,
   CloudIcon,
+  DocumentValidationIcon,
   Exchange01Icon,
   FolderLibraryIcon,
   LegalDocument01Icon,
@@ -16,12 +18,12 @@ import {
   PencilEdit01Icon,
   Route02Icon,
   Tag01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { buildWorkflowPin } from "@/animations/workflowAnimations";
-import { spawnRipple } from "@/animations/microInteractions";
 
 interface Stage {
   key: string;
@@ -37,8 +39,7 @@ const STAGES: Stage[] = [
     number: "01",
     label: "Ingest",
     icon: LegalDocument01Icon,
-    description:
-      "Notices arrive from email, the GST portal, or cloud storage — Litwatch pulls them into one place automatically.",
+    description: "Bring notices from supported sources into one workspace.",
   },
   {
     key: "classify",
@@ -46,23 +47,46 @@ const STAGES: Stage[] = [
     label: "Classify",
     icon: Tag01Icon,
     description:
-      "AI reads the notice, identifies its type, and extracts the dates and GST details that matter.",
+      "Identify the notice type and extract important dates, sections and GST details.",
+  },
+  {
+    key: "validate",
+    number: "03",
+    label: "Validate",
+    icon: DocumentValidationIcon,
+    description:
+      "Check notice information against available GST filings and client records.",
+  },
+  {
+    key: "analyse",
+    number: "04",
+    label: "Analyse",
+    icon: ChartAnalysisIcon,
+    description:
+      "Identify mismatches, discrepancies and areas requiring attention.",
   },
   {
     key: "draft",
-    number: "03",
+    number: "05",
     label: "Draft",
     icon: PencilEdit01Icon,
     description:
-      "A draft reply is generated using legal and rule-based reasoning, then routed to you for review, edits and approval.",
+      "Generate an editable AI-assisted response using the available information and applicable rules.",
+  },
+  {
+    key: "review",
+    number: "06",
+    label: "Review & Approve",
+    icon: UserCheck01Icon,
+    description: "The consultant reviews, edits and approves the response.",
   },
   {
     key: "track",
-    number: "04",
+    number: "07",
     label: "Track",
     icon: Route02Icon,
     description:
-      "Hearings, orders, payments and appeals stay tracked in one timeline, end to end.",
+      "Monitor case progress, pending actions and next steps from one place.",
   },
 ];
 
@@ -155,7 +179,129 @@ function StageBody({ stageKey }: { stageKey: string }) {
     );
   }
 
+  if (stageKey === "validate") {
+    const checks = [
+      { label: "GSTR-3B filings", status: "Matched" },
+      { label: "GSTR-1 returns", status: "Matched" },
+      { label: "ITC ledger", status: "Discrepancy" },
+      { label: "Client records", status: "Matched" },
+    ];
+
+    return (
+      <div className="space-y-5">
+        <p className="text-[15px] font-semibold text-ink">
+          Cross-checking notice details
+        </p>
+
+        <div className="space-y-2.5">
+          {checks.map((check) => (
+            <div
+              key={check.label}
+              className="flex items-center justify-between rounded-md border border-border bg-neutral-50 px-4 py-3"
+            >
+              <span className="text-[13px] font-medium text-ink">
+                {check.label}
+              </span>
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10.5px] font-semibold ${
+                  check.status === "Matched"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                }`}
+              >
+                <HugeiconsIcon
+                  icon={check.status === "Matched" ? CheckmarkCircle02Icon : Alert01Icon}
+                  size={12}
+                  strokeWidth={2}
+                />
+                {check.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (stageKey === "analyse") {
+    const findings = [
+      { label: "ITC mismatch of ₹1,24,000 in Q3 filing", severity: "High" },
+      { label: "Late filing for one return period", severity: "Medium" },
+      { label: "Minor rounding difference in tax computation", severity: "Low" },
+    ];
+
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <p className="text-[15px] font-semibold text-ink">
+            Discrepancies identified
+          </p>
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
+            <HugeiconsIcon icon={ChartAnalysisIcon} size={12} strokeWidth={2} />
+            3 areas flagged
+          </span>
+        </div>
+
+        <div className="space-y-2.5">
+          {findings.map((finding) => (
+            <div
+              key={finding.label}
+              className="flex items-start gap-3 rounded-md border border-border bg-neutral-50 p-4"
+            >
+              <span
+                className={`mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                  finding.severity === "High"
+                    ? "bg-red-100 text-red-700"
+                    : finding.severity === "Medium"
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-neutral-100 text-ink/60"
+                }`}
+              >
+                {finding.severity}
+              </span>
+              <p className="text-[13px] leading-relaxed text-ink/75">
+                {finding.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (stageKey === "draft") {
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <p className="text-[15px] font-semibold text-ink">
+            Generating response
+          </p>
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
+            <HugeiconsIcon icon={AiMagicIcon} size={12} strokeWidth={2} />
+            AI-assisted
+          </span>
+        </div>
+
+        <div className="space-y-3 rounded-md border border-border bg-neutral-50 p-5">
+          <div className="space-y-2">
+            {[100, 92, 85, 70].map((width, i) => (
+              <span
+                key={i}
+                className="block h-2 rounded-full bg-white"
+                style={{ width: `${width}%` }}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-2 pt-1 text-[12px] text-ink/55">
+            <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+            Drafted using applicable rules and case information
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (stageKey === "review") {
     return (
       <div className="space-y-5">
         <div className="flex items-center justify-between">
@@ -163,8 +309,8 @@ function StageBody({ stageKey }: { stageKey: string }) {
             Draft ready for review
           </p>
           <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-gradient-to-r from-lavender-100 to-cream-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
-            <HugeiconsIcon icon={AiMagicIcon} size={12} strokeWidth={2} />
-            AI-assisted
+            <HugeiconsIcon icon={UserCheck01Icon} size={12} strokeWidth={2} />
+            Consultant review
           </span>
         </div>
 
@@ -298,7 +444,7 @@ const MOBILE_NODE_SIZE = 66;
 // o'clock, pointing down toward its own content.
 const MOBILE_ACTIVE_SLOT_ANGLE = 90;
 
-export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }) {
+export function WorkflowSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const mobilePinRef = useRef<HTMLDivElement>(null);
@@ -313,18 +459,11 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
   // edge — keeps the active + adjacent (top/bottom) nodes visible while
   // the far/back node clips off-screen, so only three nodes ever show.
   const WHEEL_CENTER_OFFSET = WHEEL_RADIUS * 0.45;
-  // The right-side stage panel is sized to match the wheel + info column
-  // so both sides end at the same point — otherwise the taller side's
-  // tail hangs below the shorter one right as the pin releases, landing
-  // awkwardly against the next section.
-  const DESKTOP_COLUMN_HEIGHT =
-    WHEEL_RADIUS * 2 + WHEEL_NODE_SIZE + WHEEL_INFO_GAP + WHEEL_INFO_HEIGHT;
-
-  const handleCtaClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { gsap } = getGsap();
-    spawnRipple(gsap, e.currentTarget, e.clientX, e.clientY, "rgba(201,175,128,0.4)");
-    onRequestDemo();
-  };
+  // The right-side stage panel is sized to fit its content (not the
+  // wheel's full diameter, which left a lot of dead space) — the grid row
+  // still ends up as tall as the wheel column since both sides are
+  // vertically centered within it, so nothing overflows at release.
+  const DESKTOP_PANEL_HEIGHT = 420;
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -371,30 +510,13 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
     </h2>
   );
 
-  const cta = (
-    <button
-      type="button"
-      onClick={handleCtaClick}
-      className="group relative mt-6 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-transparent px-[15px] py-[10px] text-[14.5px] font-medium text-primary transition-colors hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-    >
-      Request a demo
-      <HugeiconsIcon
-        icon={ArrowRight02Icon}
-        size={16}
-        strokeWidth={2}
-        className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-      />
-    </button>
-  );
-
   return (
     <section id="workflow" ref={sectionRef} className="py-24 lg:py-0">
       {!reducedMotion && (
         <div ref={pinRef} className="hidden lg:block">
           <div className="mx-auto max-w-[1360px] px-10 pb-24 pt-16">
             {eyebrow}
-            {headline}
-            <div className="mb-6">{cta}</div>
+            <div className="mb-6">{headline}</div>
             <div className="grid w-full grid-cols-12 gap-8 xl:gap-16">
               <div className="col-span-5 flex flex-col justify-center">
                 <div
@@ -499,7 +621,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
               <div className="col-span-7 flex items-center">
                 <div
                   className="relative w-full overflow-hidden rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-8 shadow-[0_1px_2px_rgba(24,21,31,0.04),0_32px_64px_-28px_rgba(24,21,31,0.22)]"
-                  style={{ height: DESKTOP_COLUMN_HEIGHT }}
+                  style={{ height: DESKTOP_PANEL_HEIGHT }}
                 >
                   <div
                     data-workflow="progress-bar"
@@ -530,8 +652,7 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
         <div ref={mobilePinRef} className="lg:hidden">
           <div className="mx-auto max-w-[560px] px-6 pb-16 pt-16">
             {eyebrow}
-            {headline}
-            <div className="mb-8">{cta}</div>
+            <div className="mb-8">{headline}</div>
 
             <div
               className="relative mx-auto"
@@ -656,7 +777,6 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
           <div className="mx-auto max-w-[1360px] px-6 pb-16 lg:px-10">
             {eyebrow}
             {headline}
-            {cta}
           </div>
           <div className="mx-auto flex max-w-[1360px] flex-col gap-6 px-6 lg:px-10">
             {STAGES.map((stage) => (

@@ -3,11 +3,15 @@
 import { useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  Alert01Icon,
+  ChartAnalysisIcon,
   CheckmarkCircle02Icon,
+  DocumentValidationIcon,
   LegalDocument01Icon,
   PencilEdit01Icon,
   Route02Icon,
   Tag01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { buildJourneyLoop } from "@/animations/journeyAnimations";
@@ -15,7 +19,10 @@ import { buildJourneyLoop } from "@/animations/journeyAnimations";
 const STAGES = [
   { key: "ingest", label: "Ingest", icon: LegalDocument01Icon },
   { key: "classify", label: "Classify", icon: Tag01Icon },
+  { key: "validate", label: "Validate", icon: DocumentValidationIcon },
+  { key: "analyse", label: "Analyse", icon: ChartAnalysisIcon },
   { key: "draft", label: "Draft", icon: PencilEdit01Icon },
+  { key: "review", label: "Review", icon: UserCheck01Icon },
   { key: "track", label: "Track", icon: Route02Icon },
 ] as const;
 
@@ -59,27 +66,27 @@ export function NoticeJourneyCard() {
       </div>
 
       {/* Stepper */}
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-start">
         {STAGES.map((stage, i) => (
-          <div key={stage.key} className="flex flex-1 items-center last:flex-none">
-            <div className="flex flex-col items-center gap-2">
+          <div key={stage.key} className="flex flex-1 items-start last:flex-none">
+            <div className="flex w-[38px] flex-col items-center gap-1.5">
               <div
                 data-journey="dot"
-                className="flex h-8 w-8 items-center justify-center rounded-full border transition-colors"
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors"
                 style={{
                   backgroundColor: i === 0 ? "#f4f1fb" : "#ffffff",
                   borderColor: i === 0 ? "#371e71" : "#e4e0e8",
                   color: i === 0 ? "#371e71" : "#6f6b78",
                 }}
               >
-                <HugeiconsIcon icon={stage.icon} size={14} strokeWidth={2} />
+                <HugeiconsIcon icon={stage.icon} size={11} strokeWidth={2} />
               </div>
-              <span className="text-[10.5px] font-medium tracking-[0.06em] text-muted">
+              <span className="text-center text-[9px] font-medium leading-tight tracking-[0.04em] text-muted">
                 {stage.label}
               </span>
             </div>
             {i < STAGES.length - 1 && (
-              <div className="relative mx-2 mb-5 h-px flex-1 bg-border">
+              <div className="relative mx-1 mt-3 h-px flex-1 bg-border">
                 <div
                   data-journey="connector-fill"
                   className="absolute inset-y-0 left-0 h-px w-full origin-left scale-x-0 bg-primary"
@@ -135,6 +142,60 @@ export function NoticeJourneyCard() {
           </div>
         </div>
 
+        {/* Validate */}
+        <div data-journey="panel" className="absolute inset-0" style={{ opacity: 0 }}>
+          <p className="mb-4 text-[13px] font-medium text-ink">
+            Checked against filings
+          </p>
+          <div className="space-y-2">
+            {[
+              { label: "GSTR-3B filings", ok: true },
+              { label: "ITC ledger", ok: false },
+            ].map((check) => (
+              <div
+                key={check.label}
+                className="flex items-center justify-between rounded-md border border-border bg-neutral-50 px-3 py-2.5"
+              >
+                <span className="text-[12.5px] font-medium text-ink">
+                  {check.label}
+                </span>
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9.5px] font-semibold ${
+                    check.ok ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  <HugeiconsIcon
+                    icon={check.ok ? CheckmarkCircle02Icon : Alert01Icon}
+                    size={10}
+                    strokeWidth={2}
+                  />
+                  {check.ok ? "Matched" : "Discrepancy"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Analyse */}
+        <div data-journey="panel" className="absolute inset-0" style={{ opacity: 0 }}>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-[13px] font-medium text-ink">
+              Discrepancy flagged
+            </p>
+            <span className="rounded-[3px] bg-lavender-100 px-2 py-0.5 text-[10px] font-medium tracking-[0.06em] text-primary">
+              1 area
+            </span>
+          </div>
+          <div className="flex items-start gap-2.5 rounded-md border border-border bg-neutral-50 p-4">
+            <span className="mt-0.5 shrink-0 rounded-full bg-red-100 px-2 py-0.5 text-[9.5px] font-semibold text-red-700">
+              High
+            </span>
+            <p className="text-[12px] leading-relaxed text-ink/75">
+              ITC mismatch of ₹1,24,000 in Q3 filing
+            </p>
+          </div>
+        </div>
+
         {/* Draft */}
         <div data-journey="panel" className="absolute inset-0" style={{ opacity: 0 }}>
           <div className="mb-4 flex items-center justify-between">
@@ -152,7 +213,28 @@ export function NoticeJourneyCard() {
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[12px] font-medium text-secondary-dark">
             <HugeiconsIcon icon={PencilEdit01Icon} size={13} strokeWidth={1.8} />
-            Awaiting your review
+            Ready for review
+          </div>
+        </div>
+
+        {/* Review */}
+        <div data-journey="panel" className="absolute inset-0" style={{ opacity: 0 }}>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-[13px] font-medium text-ink">
+              Awaiting approval
+            </p>
+            <span className="rounded-[3px] bg-lavender-100 px-2 py-0.5 text-[10px] font-medium tracking-[0.06em] text-primary">
+              Consultant review
+            </span>
+          </div>
+          <div className="space-y-2 rounded-md border border-border bg-neutral-50 p-4">
+            <span className="block h-1.5 w-full rounded-full bg-white" />
+            <span className="block h-1.5 w-[90%] rounded-full bg-white" />
+            <span className="block h-1.5 w-[65%] rounded-full bg-white" />
+          </div>
+          <div className="mt-4 flex items-center gap-1.5 text-[12px] font-medium text-secondary-dark">
+            <HugeiconsIcon icon={UserCheck01Icon} size={13} strokeWidth={1.8} />
+            Edited and approved
           </div>
         </div>
 

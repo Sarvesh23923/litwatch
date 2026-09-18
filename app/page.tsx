@@ -31,7 +31,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero onRequestDemo={openLeadForm("hero")} />
         <ProblemSection />
-        <WorkflowSection onRequestDemo={openLeadForm("workflow")} />
+        <WorkflowSection />
         <AIControlSection />
         {/* <ProductShowcase onRequestDemo={openLeadForm("product_showcase")} /> */}
         <FeaturesSection onRequestDemo={openLeadForm("features")} />

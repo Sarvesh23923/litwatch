@@ -4,10 +4,13 @@ import { useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight02Icon,
+  ChartAnalysisIcon,
+  DocumentValidationIcon,
   LegalDocument01Icon,
   PencilEdit01Icon,
   Route02Icon,
   Tag01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { revealOnScroll } from "@/animations/scrollReveal";
@@ -16,7 +19,10 @@ import { spawnRipple } from "@/animations/microInteractions";
 const STAGES = [
   { label: "Ingest", icon: LegalDocument01Icon },
   { label: "Classify", icon: Tag01Icon },
+  { label: "Validate", icon: DocumentValidationIcon },
+  { label: "Analyse", icon: ChartAnalysisIcon },
   { label: "Draft", icon: PencilEdit01Icon },
+  { label: "Review", icon: UserCheck01Icon },
   { label: "Track", icon: Route02Icon },
 ];
 
@@ -112,17 +118,19 @@ export function FinalCTA({ onRequestDemo }: { onRequestDemo: () => void }) {
             </div>
           </div>
 
-          <div className="relative mx-auto mt-16 flex max-w-[640px] items-center">
+          <div className="relative mx-auto mt-16 flex max-w-[720px] flex-wrap items-start justify-center gap-y-6">
             {STAGES.map((stage, i) => (
-              <div key={stage.label} className="flex flex-1 items-center last:flex-none">
-                <div className="flex flex-col items-center gap-2.5">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-sm">
-                    <HugeiconsIcon icon={stage.icon} size={28} strokeWidth={1.6} />
+              <div key={stage.label} className="flex items-start">
+                <div className="flex w-14 flex-col items-center gap-2">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-sm sm:h-14 sm:w-14">
+                    <HugeiconsIcon icon={stage.icon} size={20} strokeWidth={1.6} />
                   </div>
-                  <span className="text-[12.5px] font-medium text-white/60">{stage.label}</span>
+                  <span className="text-center text-[11px] font-medium leading-tight text-white/60">
+                    {stage.label}
+                  </span>
                 </div>
                 {i < STAGES.length - 1 && (
-                  <div className="mx-2 mb-6 h-px flex-1 bg-white/15" />
+                  <div className="mt-5 h-px w-6 shrink-0 bg-white/15 sm:mt-7 sm:w-10" />
                 )}
               </div>
             ))}

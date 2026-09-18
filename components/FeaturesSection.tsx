@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  AiMagicIcon,
   ArrowRight02Icon,
   Calendar01Icon,
-  CheckmarkCircle02Icon,
+  CustomerSupportIcon,
+  DashboardSquare01Icon,
   FileSearchIcon,
+  FolderAddIcon,
+  FolderLibraryIcon,
   Route02Icon,
-  UserGroupIcon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { revealOnScroll } from "@/animations/scrollReveal";
@@ -54,19 +55,67 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
         </h2>
 
         <div className="mt-14 grid grid-cols-12 gap-5">
-          {/* Notice intelligence — large */}
+          {/* Notice Register — large */}
           <div
             data-feature="tile"
             className="col-span-12 rounded-lg border border-border bg-white p-8 lg:col-span-7"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
+              <HugeiconsIcon icon={FolderLibraryIcon} size={18} strokeWidth={1.8} />
+            </div>
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">Notice Register</h3>
+            <p className="mb-6 max-w-[420px] text-[14.5px] leading-relaxed text-ink/60">
+              Every notice. Every client. One view.
+            </p>
+            <div className="space-y-2">
+              {[
+                { client: "ABC Industries", notice: "Section 73" },
+                { client: "Meridian Textiles", notice: "Section 74" },
+                { client: "Kavya Apparels", notice: "ASMT-10" },
+              ].map((row) => (
+                <div
+                  key={row.client}
+                  className="flex items-center justify-between rounded-md border border-border bg-neutral-50 px-3.5 py-2.5"
+                >
+                  <span className="text-[13px] font-medium text-ink">{row.client}</span>
+                  <span className="rounded-[3px] border border-border bg-white px-2 py-1 text-[11px] font-medium text-ink/60">
+                    {row.notice}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Smart Deadline Tracker */}
+          <div
+            data-feature="tile"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-5"
+          >
+            <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
+              <HugeiconsIcon icon={Calendar01Icon} size={18} strokeWidth={1.8} />
+            </div>
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">Smart Deadline Tracker</h3>
+            <p className="mb-6 text-[14.5px] leading-relaxed text-ink/60">
+              Never lose sight of important dates and pending actions.
+            </p>
+            <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-lavender-50/60 px-3.5 py-2.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              <span className="text-[13px] font-medium text-primary">Reply due in 2 days</span>
+            </div>
+          </div>
+
+          {/* Notice Intelligence */}
+          <div
+            data-feature="tile"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
+          >
+            <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={FileSearchIcon} size={18} strokeWidth={1.8} />
             </div>
-            <h3 className="mb-2 text-[18px] font-semibold text-ink">Notice intelligence</h3>
-            <p className="mb-6 max-w-[420px] text-[14.5px] leading-relaxed text-ink/60">
-              Extract important details from incoming notices — client,
-              notice type, issuing authority and the dates that matter —
-              without opening every PDF by hand.
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">Notice Intelligence</h3>
+            <p className="mb-6 text-[14px] leading-relaxed text-ink/60">
+              Extract key notice details, sections, figures and important
+              dates.
             </p>
             <div className="flex flex-wrap gap-2">
               {["Section 73", "CGST Range 4", "Deadline: 12 days"].map((chip) => (
@@ -80,65 +129,25 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
             </div>
           </div>
 
-          {/* Deadline awareness */}
-          <div
-            data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-5"
-          >
-            <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
-              <HugeiconsIcon icon={Calendar01Icon} size={18} strokeWidth={1.8} />
-            </div>
-            <h3 className="mb-2 text-[18px] font-semibold text-ink">Deadline awareness</h3>
-            <p className="mb-6 text-[14.5px] leading-relaxed text-ink/60">
-              Surface the dates and actions that need attention before they
-              get buried in the workday.
-            </p>
-            <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-lavender-50/60 px-3.5 py-2.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              <span className="text-[13px] font-medium text-primary">Reply due in 2 days</span>
-            </div>
-          </div>
-
-          {/* AI-assisted drafting */}
+          {/* Active Case Onboarding */}
           <div
             data-feature="tile"
             className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
-              <HugeiconsIcon icon={AiMagicIcon} size={18} strokeWidth={1.8} />
+              <HugeiconsIcon icon={FolderAddIcon} size={18} strokeWidth={1.8} />
             </div>
-            <h3 className="mb-2 text-[18px] font-semibold text-ink">AI-assisted drafting</h3>
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">Active Case Onboarding</h3>
             <p className="mb-6 text-[14px] leading-relaxed text-ink/60">
-              Generate an editable first draft using legal and rule-based
-              reasoning — a starting point, not a final answer.
+              Bring existing notices and ongoing cases into LitWatch.
             </p>
-            <div className="space-y-2">
-              <span className="block h-1.5 w-full rounded-full bg-neutral-100" />
-              <span className="block h-1.5 w-[80%] rounded-full bg-neutral-100" />
-              <span className="block h-1.5 w-[60%] rounded-full bg-neutral-100" />
+            <div className="flex items-center gap-2 rounded-md border border-dashed border-primary/30 bg-lavender-50/40 px-3.5 py-2.5">
+              <HugeiconsIcon icon={FolderAddIcon} size={14} strokeWidth={1.8} className="text-primary" />
+              <span className="text-[13px] font-medium text-primary">3 cases imported</span>
             </div>
           </div>
 
-          {/* Reviewer workflow */}
-          <div
-            data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
-          >
-            <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
-              <HugeiconsIcon icon={CheckmarkCircle02Icon} size={18} strokeWidth={1.8} />
-            </div>
-            <h3 className="mb-2 text-[18px] font-semibold text-ink">Reviewer workflow</h3>
-            <p className="mb-6 text-[14px] leading-relaxed text-ink/60">
-              Every draft is routed for review — edit, approve or override
-              before anything goes out.
-            </p>
-            <div className="flex gap-2">
-              <span className="rounded-[3px] border border-border bg-white px-2.5 py-1.5 text-[11.5px] font-medium text-ink">Edit</span>
-              <span className="rounded-[3px] bg-primary px-2.5 py-1.5 text-[11.5px] font-medium text-white">Approve</span>
-            </div>
-          </div>
-
-          {/* Case tracking */}
+          {/* Case Timeline */}
           <div
             data-feature="tile"
             className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
@@ -146,10 +155,9 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={Route02Icon} size={18} strokeWidth={1.8} />
             </div>
-            <h3 className="mb-2 text-[18px] font-semibold text-ink">Case tracking</h3>
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">Case Timeline</h3>
             <p className="mb-6 text-[14px] leading-relaxed text-ink/60">
-              Track hearings, orders, payments and appeals in one timeline,
-              end to end.
+              Follow the progress of every matter in one connected timeline.
             </p>
             <div className="flex items-center">
               {[true, true, false].map((done, i) => (
@@ -161,20 +169,20 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
             </div>
           </div>
 
-          {/* Client workspace — wide banner */}
+          {/* Practice Control Tower */}
           <div
             data-feature="tile"
-            className="col-span-12 flex flex-col items-start justify-between gap-6 rounded-lg border border-border bg-white p-8 sm:flex-row sm:items-center"
+            className="col-span-12 flex flex-col items-start justify-between gap-6 rounded-lg border border-border bg-white p-8 sm:flex-row sm:items-center lg:col-span-7"
           >
             <div className="flex items-start gap-4 sm:items-center">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-lavender-50 text-primary">
-                <HugeiconsIcon icon={UserGroupIcon} size={18} strokeWidth={1.8} />
+                <HugeiconsIcon icon={DashboardSquare01Icon} size={18} strokeWidth={1.8} />
               </div>
               <div>
-                <h3 className="mb-1 text-[18px] font-semibold text-ink">Client workspace</h3>
-                <p className="max-w-[440px] text-[14.5px] leading-relaxed text-ink/60">
-                  Organize notice activity by client, so every case has a
-                  clear home.
+                <h3 className="mb-1 text-[18px] font-semibold text-ink">Practice Control Tower</h3>
+                <p className="max-w-[380px] text-[14.5px] leading-relaxed text-ink/60">
+                  See multiple clients, GSTINs, notices and priorities from
+                  one dashboard.
                 </p>
               </div>
             </div>
@@ -189,6 +197,25 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* CA / Advocate Support */}
+          <div
+            data-feature="tile"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-5"
+          >
+            <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
+              <HugeiconsIcon icon={CustomerSupportIcon} size={18} strokeWidth={1.8} />
+            </div>
+            <h3 className="mb-2 text-[18px] font-semibold text-ink">CA / Advocate Support</h3>
+            <p className="mb-6 text-[14.5px] leading-relaxed text-ink/60">
+              Request professional assistance whenever additional support is
+              required.
+            </p>
+            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-primary px-3 py-1.5 text-[12.5px] font-medium text-white">
+              <HugeiconsIcon icon={CustomerSupportIcon} size={13} strokeWidth={1.8} />
+              Request assistance
+            </span>
           </div>
         </div>
 

@@ -47,7 +47,7 @@ export function Navbar({ onRequestDemo }: { onRequestDemo: () => void }) {
       <div className="mx-auto flex max-w-[1360px] items-center justify-between px-6 lg:px-10">
         <a href="#top" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/logo.svg" alt="Litwatch" className="h-auto w-[220px]" />
+          <img src="/images/logo.svg" alt="Litwatch" className="h-auto w-[140px] sm:w-[180px] lg:w-[220px]" />
         </a>
 
         <nav className="hidden items-center gap-9 lg:flex">
@@ -65,7 +65,7 @@ export function Navbar({ onRequestDemo }: { onRequestDemo: () => void }) {
         <button
           type="button"
           onClick={onRequestDemo}
-          className="group inline-flex h-[39px] items-center gap-[10px] rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14px] font-medium text-white transition-colors hover:bg-primary-dark"
+          className="group hidden h-[39px] items-center gap-[10px] rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14px] font-medium text-white transition-colors hover:bg-primary-dark md:inline-flex"
         >
           Request a demo
           <span

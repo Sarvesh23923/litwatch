@@ -304,12 +304,11 @@ export function ControlTower({ onRequestDemo }: { onRequestDemo: () => void }) {
           Practice control tower
         </span>
         <h2 data-tower="item" className="max-w-[680px] text-[32px] font-semibold leading-[1.15] tracking-[-0.015em] text-ink sm:text-[38px] lg:text-[42px]">
-          See the whole practice at a glance.
+          One practice. Every notice. Nothing hidden.
         </h2>
         <p data-tower="item" className="mt-4 max-w-[560px] text-[15.5px] leading-relaxed text-ink/60">
-          Every client, every notice, one prioritized view — notices move
-          through triage and settle in, exactly like Litwatch keeps your
-          real practice moving.
+          LitWatch brings GST notice management into one controlled
+          workflow.
         </p>
 
         <div data-tower="item" className="mt-8 flex items-center justify-between">
