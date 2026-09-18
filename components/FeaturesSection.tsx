@@ -45,7 +45,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
   return (
     <section id="features" ref={rootRef} className="py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+        <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
           Features
         </span>
@@ -57,7 +57,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* Notice intelligence — large */}
           <div
             data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-5 sm:p-8 lg:col-span-7"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 lg:col-span-7"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={FileSearchIcon} size={18} strokeWidth={1.8} />
@@ -83,7 +83,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* Deadline awareness */}
           <div
             data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-5 sm:p-8 sm:col-span-6 lg:col-span-5"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-5"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={Calendar01Icon} size={18} strokeWidth={1.8} />
@@ -102,7 +102,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* AI-assisted drafting */}
           <div
             data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-5 sm:p-8 sm:col-span-6 lg:col-span-4"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={AiMagicIcon} size={18} strokeWidth={1.8} />
@@ -122,7 +122,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* Reviewer workflow */}
           <div
             data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-5 sm:p-8 sm:col-span-6 lg:col-span-4"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={CheckmarkCircle02Icon} size={18} strokeWidth={1.8} />
@@ -141,7 +141,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* Case tracking */}
           <div
             data-feature="tile"
-            className="col-span-12 rounded-lg border border-border bg-white p-5 sm:p-8 sm:col-span-6 lg:col-span-4"
+            className="col-span-12 rounded-lg border border-border bg-white p-8 sm:col-span-6 lg:col-span-4"
           >
             <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-md bg-lavender-50 text-primary">
               <HugeiconsIcon icon={Route02Icon} size={18} strokeWidth={1.8} />
@@ -164,7 +164,7 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           {/* Client workspace — wide banner */}
           <div
             data-feature="tile"
-            className="col-span-12 flex flex-col items-start justify-between gap-6 rounded-lg border border-border bg-white p-5 sm:p-8 sm:flex-row sm:items-center"
+            className="col-span-12 flex flex-col items-start justify-between gap-6 rounded-lg border border-border bg-white p-8 sm:flex-row sm:items-center"
           >
             <div className="flex items-start gap-4 sm:items-center">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-lavender-50 text-primary">
@@ -192,19 +192,21 @@ export function FeaturesSection({ onRequestDemo }: { onRequestDemo: () => void }
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCtaClick}
-          className="group relative mt-12 inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors hover:border-primary hover:bg-lavender-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        >
-          See it on your notices
-          <HugeiconsIcon
-            icon={ArrowRight02Icon}
-            size={16}
-            strokeWidth={2}
-            className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-          />
-        </button>
+        <div className="mt-12 flex justify-center">
+          <button
+            type="button"
+            onClick={handleCtaClick}
+            className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-secondary bg-secondary px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-secondary-dark hover:bg-secondary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            See it on your notices
+            <HugeiconsIcon
+              icon={ArrowRight02Icon}
+              size={16}
+              strokeWidth={2}
+              className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+            />
+          </button>
+        </div>
       </div>
     </section>
   );

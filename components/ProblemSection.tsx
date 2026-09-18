@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
@@ -108,49 +108,35 @@ const PROBLEMS = [
   {
     index: "01",
     title: "Portal hopping",
-    // body: "Notices arrive through email, GST portal, WhatsApp, and physical mail.",
-    body: "Notices arrive through email, GST portal, uploads and other channels.",
+    body: "Notices arrive through email, GST portal, WhatsApp, and physical mail.",
     icon: CloudIcon,
     stat: "4+ channels",
   },
   {
     index: "02",
     title: "Deadline pressure",
-    // body: "Critical dates buried in PDFs while the clock keeps ticking.",
-    body: "Important response dates can be buried inside documents while the clock keeps moving.",
+    body: "Critical dates buried in PDFs while the clock keeps ticking.",
     icon: AlertDiamondIcon,
     stat: "15-30 days",
   },
   {
     index: "03",
-    // title: "Manual drafting",
-    title: "Manual analysis",
-    // body: "Every response requires hours of repetitive legal groundwork.",
-    body: "Reading notices, checking figures and understanding the officer's grounds takes time.",
+    title: "Manual drafting",
+    body: "Every response requires hours of repetitive legal groundwork.",
     icon: Loading03Icon,
     stat: "3-5 hours",
   },
   {
     index: "04",
     title: "No central view",
-    // body: "Teams lose track of which client needs attention when.",
-    body: "When managing multiple clients, it can be difficult to see every active notice and pending action",
+    body: "Teams lose track of which client needs attention when.",
     icon: LegalDocument01Icon,
     stat: "50+ clients",
   },
 ];
 
-// The fragments visual is authored at a fixed 680x520 canvas. Rather than
-// hiding it below some breakpoint, the whole canvas is scaled down to fit
-// whatever width its column actually has, so it stays visible (and
-// animated) on every screen size instead of disappearing on mobile/tablet.
-const VISUAL_DESIGN_WIDTH = 680;
-const VISUAL_DESIGN_HEIGHT = 520;
-
 export function ProblemSection() {
   const rootRef = useRef<HTMLElement>(null);
-  const visualWrapRef = useRef<HTMLDivElement>(null);
-  const [visualScale, setVisualScale] = useState(1);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -166,18 +152,6 @@ export function ProblemSection() {
     }, root);
 
     return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    const wrap = visualWrapRef.current;
-    if (!wrap) return;
-    const updateScale = () => {
-      setVisualScale(Math.min(1, wrap.clientWidth / VISUAL_DESIGN_WIDTH));
-    };
-    updateScale();
-    const observer = new ResizeObserver(updateScale);
-    observer.observe(wrap);
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -198,7 +172,7 @@ export function ProblemSection() {
       <div className="relative mx-auto max-w-[1360px] px-6 lg:px-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+            <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
               The problem
             </span>
@@ -210,8 +184,8 @@ export function ProblemSection() {
           </div>
         </div>
 
-        <div className="mt-16 grid min-w-0 gap-16 xl:grid-cols-12 xl:gap-12">
-          <div className="min-w-0 xl:col-span-5">
+        <div className="mt-16 grid gap-16 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
             <div className="grid gap-5">
               {PROBLEMS.map((problem, index) => (
                 <div
@@ -221,6 +195,12 @@ export function ProblemSection() {
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
+                  <div className="absolute right-4 top-4 flex items-center gap-2">
+                    <span className="rounded-full bg-lavender-100 px-2.5 py-1 text-[11px] font-semibold text-primary">
+                      {problem.stat}
+                    </span>
+                  </div>
+
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-cream-100 transition-transform duration-300 group-hover:scale-110">
                       <HugeiconsIcon
@@ -230,20 +210,15 @@ export function ProblemSection() {
                         className="text-primary"
                       />
                     </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] font-bold text-secondary-dark">
-                            {problem.index}
-                          </span>
-                          <h3 className="text-[16px] font-semibold text-ink">
-                            {problem.title}
-                          </h3>
-                        </div>
-                        <span className="shrink-0 rounded-full bg-lavender-100 px-2.5 py-1 text-[11px] font-semibold text-primary">
-                          {problem.stat}
+                    
+                    <div className="flex-1">
+                      <div className="mb-2 flex items-center gap-3">
+                        <span className="text-[11px] font-bold text-secondary-dark">
+                          {problem.index}
                         </span>
+                        <h3 className="text-[16px] font-semibold text-ink">
+                          {problem.title}
+                        </h3>
                       </div>
                       <p className="text-[13.5px] leading-relaxed text-ink/65">
                         {problem.body}
@@ -276,30 +251,20 @@ export function ProblemSection() {
             </div>
           </div>
 
-          <div className="flex min-w-0 items-center overflow-hidden xl:col-span-7">
-            <div
-              ref={visualWrapRef}
-              className="mx-auto w-full min-w-0 max-w-[680px] overflow-hidden"
-              style={{ height: VISUAL_DESIGN_HEIGHT * visualScale }}
-            >
-            <div
-              data-problem="visual"
-              className="relative"
-              style={{
-                width: VISUAL_DESIGN_WIDTH,
-                height: VISUAL_DESIGN_HEIGHT,
-                transform: `scale(${visualScale})`,
-                transformOrigin: "top left",
-              }}
-            >
+          <div className="flex items-center justify-center lg:col-span-7">
+            <div className="relative flex h-[300px] w-full items-center justify-center overflow-hidden sm:h-[380px] md:h-[460px] lg:h-[520px]">
               <div
-                aria-hidden
-                className="absolute inset-0 -z-10"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)",
-                }}
-              />
+                data-problem="visual"
+                className="relative h-[520px] w-[680px] shrink-0 origin-center scale-[0.56] sm:scale-[0.72] md:scale-[0.86] lg:scale-100"
+              >
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 70%)",
+                  }}
+                />
 
               {FRAGMENTS.map((frag) => (
                 <div
@@ -337,31 +302,31 @@ export function ProblemSection() {
               ))}
 
               <div
-                className="absolute flex h-[180px] w-[280px] items-center justify-center"
-                style={{ top: 170, left: 200 }}
+                className="absolute flex h-[140px] w-[220px] items-center justify-center"
+                style={{ top: 190, left: 230 }}
               >
                 <div
                   data-problem="target-outline"
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-primary/30 bg-lavender-50/30"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/30 bg-lavender-50/30"
                 >
                   <div className="flex items-center gap-1.5">
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" />
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.2s" }} />
                     <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.4s" }} />
                   </div>
-                  <span className="text-[13.5px] font-medium text-primary/50">
+                  <span className="text-[12px] font-medium text-primary/50">
                     Centralizing...
                   </span>
                 </div>
                 <div
                   data-problem="target-solid"
-                  className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-3.5 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
+                  className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-3 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/logo.svg" alt="Litwatch" className="h-8 w-auto" />
+                  <img src="/images/logo.svg" alt="Litwatch" className="h-6 w-auto" />
                   <div className="flex items-center gap-1.5">
-                    <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                    <span className="text-[12px] font-medium text-green-700">
+                    <div className="h-1 w-1 rounded-full bg-green-500" />
+                    <span className="text-[10px] font-medium text-green-700">
                       All notices unified
                     </span>
                   </div>
@@ -381,7 +346,7 @@ export function ProblemSection() {
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
             </div>
           </div>
         </div>

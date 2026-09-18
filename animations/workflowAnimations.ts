@@ -1,127 +1,129 @@
 import type { gsap as GsapType } from "gsap";
 import type { ScrollTrigger as ScrollTriggerType } from "gsap/ScrollTrigger";
 
-const BUBBLE_ACTIVE = { scale: 1.6, backgroundColor: "#ebe5f6", color: "#371e71" };
-const BUBBLE_INACTIVE = { scale: 1, backgroundColor: "#f3ead9", color: "#a88c5c" };
+function normalizeAngle(angle: number) {
+  let a = angle % 360;
+  if (a > 180) a -= 360;
+  if (a < -180) a += 360;
+  return a;
+}
 
 /**
- * Pins the workflow stage and scrubs one case through all 7 stages as the
- * user scrolls. The orbit ring rotates so the active stage's icon always
- * lands on the anchor point and grows into the "current" bubble, spinning
- * along with the ring, while the caption (the active stage's name, fixed
- * at that same anchor point), description copy, the progress bar and the
- * stage panel all stay in sync off the same timeline.
+ * Pins the workflow stage and scrubs one case through
+ * Ingest → Classify → Draft → Track as the user scrolls. A ring of stage
+ * icons physically rotates like a ferris wheel — whichever node lands in
+ * the "active" slot (3 o'clock by default; pass `activeSlotAngle` to move
+ * it, e.g. 90 for 6 o'clock) drives the info text, the stage panel and
+ * the progress bar, all off the same scroll progress so nothing drifts
+ * out of step.
  */
 export function buildWorkflowPin(
   gsap: typeof GsapType,
   ScrollTrigger: typeof ScrollTriggerType,
   root: HTMLElement,
   pinTarget: HTMLElement,
+  activeSlotAngle = 0,
 ) {
   const panels = gsap.utils.toArray<HTMLElement>(
     root.querySelectorAll('[data-workflow="panel"]'),
   );
-  const captions = gsap.utils.toArray<HTMLElement>(
-    root.querySelectorAll('[data-workflow="caption"]'),
+  const infos = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="info"]'),
   );
-  const descriptions = gsap.utils.toArray<HTMLElement>(
-    root.querySelectorAll('[data-workflow="description"]'),
+  const wheel = root.querySelector<HTMLElement>('[data-workflow="wheel"]');
+  const nodes = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="wheel-node"]'),
+  );
+  const nodeInners = gsap.utils.toArray<HTMLElement>(
+    root.querySelectorAll('[data-workflow="wheel-node-inner"]'),
   );
   const progressBar = root.querySelector<HTMLElement>('[data-workflow="progress-bar"]');
-  const orbitRing = root.querySelector<HTMLElement>('[data-workflow="orbit-ring"]');
-  const orbitBubbles = gsap.utils.toArray<HTMLElement>(
-    root.querySelectorAll('[data-workflow="orbit-bubble"]'),
-  );
 
   const stageCount = panels.length;
-  if (stageCount < 2) return null;
+  if (stageCount < 2 || !wheel || nodes.length !== stageCount) return null;
 
-  const STEP = 360 / stageCount;
+  const step = 360 / stageCount;
+  const baseAngles = nodes.map((_, i) => i * step);
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: pinTarget,
-      start: "top top",
-      end: `+=${stageCount * 900}`,
-      scrub: true,
-      pin: pinTarget,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
+  function render(progress: number) {
+    const scrub = progress * (stageCount - 1);
+    const index = Math.min(stageCount - 2, Math.floor(scrub));
+    const t = scrub - index;
+    const rotation = -scrub * step + activeSlotAngle;
+
+    gsap.set(wheel!, { rotate: rotation });
+
+    nodes.forEach((node, i) => {
+      const total = normalizeAngle(baseAngles[i] + rotation);
+      const dist = Math.abs(normalizeAngle(total - activeSlotAngle)) / 180;
+      const scale = gsap.utils.clamp(0.82, 1, 1 - dist * 0.32);
+      const opacity = gsap.utils.clamp(0.4, 1, 1 - dist * 0.65);
+      gsap.set(node, { scale, opacity });
+      gsap.set(nodeInners[i], { rotate: -total });
+    });
+
+    // Hold each stage fully visible for most of its dwell and only blend
+    // into the next one in the final stretch, so consecutive panels/info
+    // blocks (which differ in height) don't sit double-exposed on top of
+    // each other for the whole scroll segment.
+    const crossStart = 0.72;
+    const cross = gsap.utils.clamp(0, 1, (t - crossStart) / (1 - crossStart));
+
+    panels.forEach((panel, i) => {
+      let opacity = 0;
+      let y = 16;
+      if (i === index) {
+        opacity = 1 - cross;
+        y = -16 * cross;
+      } else if (i === index + 1) {
+        opacity = cross;
+        y = 16 * (1 - cross);
+      }
+      gsap.set(panel, { opacity, y });
+    });
+
+    infos.forEach((info, i) => {
+      let opacity = 0;
+      let y = 8;
+      if (i === index) {
+        opacity = 1 - cross;
+        y = -8 * cross;
+      } else if (i === index + 1) {
+        opacity = cross;
+        y = 8 * (1 - cross);
+      }
+      gsap.set(info, { opacity, y });
+    });
+
+    if (progressBar) {
+      const pct = ((index + 1 + t) / stageCount) * 100;
+      gsap.set(progressBar, { width: `${pct}%` });
+    }
+  }
+
+  render(0);
+
+  // The active scrub only needs `activeDistance` of scroll to run through
+  // every stage; the remaining `holdDistance` keeps the pin locked on the
+  // fully-settled last stage so viewers get a beat to look at it before
+  // the section releases into whatever comes next.
+  const activeDistance = stageCount * 900;
+  const holdDistance = 600;
+  const totalDistance = activeDistance + holdDistance;
+
+  const trigger = ScrollTrigger.create({
+    trigger: pinTarget,
+    start: "top top",
+    end: `+=${totalDistance}`,
+    scrub: true,
+    pin: pinTarget,
+    anticipatePin: 1,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      const effective = Math.min(1, (self.progress * totalDistance) / activeDistance);
+      render(effective);
     },
   });
 
-  tl.set(panels, { opacity: 0, y: 16 });
-  tl.set(panels[0], { opacity: 1, y: 0 });
-  tl.set(captions, { opacity: 0, y: 8 });
-  tl.set(captions[0], { opacity: 1, y: 0 });
-  tl.set(descriptions, { opacity: 0, y: 8 });
-  tl.set(descriptions[0], { opacity: 1, y: 0 });
-  if (orbitRing) tl.set(orbitRing, { rotation: 0 });
-  if (orbitBubbles.length) {
-    tl.set(orbitBubbles, BUBBLE_INACTIVE);
-    tl.set(orbitBubbles[0], BUBBLE_ACTIVE);
-  }
-  if (progressBar) tl.set(progressBar, { width: `${(1 / stageCount) * 100}%` });
-
-  const HOLD = 1;
-
-  for (let i = 0; i < stageCount - 1; i++) {
-    const next = i + 1;
-
-    tl.to({}, { duration: HOLD });
-
-    tl.to(panels[i], { opacity: 0, y: -16, duration: 0.6 }, ">");
-    tl.to(captions[i], { opacity: 0, y: -8, duration: 0.4 }, "<");
-    tl.to(descriptions[i], { opacity: 0, y: -8, duration: 0.4 }, "<");
-
-    if (orbitRing) {
-      tl.to(orbitRing, { rotation: -next * STEP, duration: 0.6, ease: "power2.out" }, "<");
-    }
-    if (orbitBubbles.length) {
-      tl.to(orbitBubbles[i], { ...BUBBLE_INACTIVE, duration: 0.4 }, "<");
-    }
-
-    if (progressBar) {
-      tl.to(
-        progressBar,
-        { width: `${((next + 1) / stageCount) * 100}%`, duration: 0.6, ease: "power2.out" },
-        "<",
-      );
-    }
-
-    if (orbitBubbles.length) {
-      tl.to(orbitBubbles[next], { ...BUBBLE_ACTIVE, duration: 0.4 }, "<+=0.1");
-    }
-    tl.fromTo(
-      panels[next],
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.6 },
-      "<+=0.1",
-    );
-    tl.fromTo(
-      captions[next],
-      { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      "<+=0.15",
-    );
-    tl.fromTo(
-      descriptions[next],
-      { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      "<+=0.15",
-    );
-  }
-
-  tl.to({}, { duration: HOLD });
-
-  // Force the opening frame (all the tl.set(...) calls above) to paint
-  // synchronously, then have ScrollTrigger re-measure and re-render this
-  // specific trigger. Without this, a scrub-linked timeline's cumulative
-  // state at time 0 can be left only partially painted (e.g. every stage
-  // stuck looking inactive) until an actual scroll event forces GSAP's
-  // normal update loop to run.
-  tl.render(0, true, true);
-  tl.scrollTrigger?.refresh();
-
-  return tl;
+  return trigger;
 }

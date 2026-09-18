@@ -1,12 +1,11 @@
 import type { gsap as GsapType } from "gsap";
 
 const HOLD = 1.9;
-const STAGE_COUNT = 7;
+const STAGE_COUNT = 4;
 
 /**
  * A looping, self-playing sequence: one notice moving through
- * Ingest → Classify → Validate → Analyse → Draft → Review → Track inside
- * a single card. Panels are
+ * Ingest → Classify → Draft → Track inside a single card. Panels are
  * stacked (absolute) and cross-fade; the stepper's connector lines fill
  * in sync so the stepper and the content always agree on what stage
  * is "active".

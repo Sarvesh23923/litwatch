@@ -1,4 +1,5 @@
 const NAV_LINKS = [
+  { label: "Product", href: "#product" },
   { label: "How it works", href: "#workflow" },
   { label: "Features", href: "#features" },
   { label: "For consultants", href: "#trust" },

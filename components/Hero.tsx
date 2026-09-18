@@ -30,6 +30,10 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
         tl.progress(1);
       }
 
+      // GSAP has now set the timeline's initial (or, for reduced motion,
+      // final) inline styles above — safe to reveal the wrapper.
+      root.setAttribute("data-hero-ready", "");
+
       return () => {
         ambient?.kill();
       };
@@ -52,6 +56,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
     <section
       id="top"
       ref={rootRef}
+      data-hero-root
       className="relative overflow-hidden pt-36 pb-24 lg:pt-44 lg:pb-32"
     >
       <div
@@ -80,12 +85,12 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
 
           <h1 className="text-[40px] font-semibold leading-[1.08] tracking-[-0.02em] text-ink sm:text-[48px] lg:text-[54px]">
             <span className="block overflow-hidden">
-              <span data-hero="headline-line" className="block text-balance">
+              <span data-hero="headline-line" className="block">
                 Turn GST notices into
               </span>
             </span>
             <span className="block overflow-hidden">
-              <span data-hero="headline-line" className="block text-balance">
+              <span data-hero="headline-line" className="block">
                 clear next actions.
               </span>
             </span>
@@ -95,9 +100,9 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
             data-hero="paragraph"
             className="mt-6 max-w-[480px] text-[16.5px] leading-relaxed text-ink/65"
           >
-            Litwatch helps tax consultants ingest, classify, validate,
-            analyse, draft, review and track GST notices across clients —
-            with AI doing the heavy lifting and you staying in control.
+            Litwatch helps tax consultants ingest, classify, draft and track
+            GST notices across clients — with AI doing the heavy lifting and
+            you staying in control.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -121,7 +126,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
               href="#workflow"
               data-hero="cta-btn"
               onClick={(e) => handleCtaClick(e, "rgba(55,30,113,0.1)")}
-              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 bg-transparent px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-primary hover:bg-lavender-50 hover:text-primary active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-secondary bg-secondary px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors duration-200 hover:border-secondary-dark hover:bg-secondary-dark active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Explore how it works
               <HugeiconsIcon
@@ -134,7 +139,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
           </div>
         </div>
 
-        <div className="relative flex items-center lg:col-span-7">
+        <div className="relative flex items-center lg:col-span-6 lg:col-start-7">
           <NoticeJourneyCard />
         </div>
       </div>
