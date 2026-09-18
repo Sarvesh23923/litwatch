@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { gsap as GsapType } from "gsap";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { IconSvgElement } from "@hugeicons/react";
 import {
   AiMagicIcon,
   ArrowRight02Icon,
+  ChartAnalysisIcon,
   CheckmarkCircle02Icon,
   Clock01Icon,
   CloudIcon,
+  DocumentValidationIcon,
   Exchange01Icon,
   FolderLibraryIcon,
   LegalDocument01Icon,
@@ -16,10 +19,10 @@ import {
   PencilEdit01Icon,
   Route02Icon,
   Tag01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/useReducedMotion";
-import { useMediaQuery } from "@/lib/useMediaQuery";
 import { buildWorkflowPin } from "@/animations/workflowAnimations";
 import { spawnRipple } from "@/animations/microInteractions";
 
@@ -49,22 +52,61 @@ const STAGES: Stage[] = [
       "AI reads the notice, identifies its type, and extracts the dates and GST details that matter.",
   },
   {
-    key: "draft",
+    key: "validate",
     number: "03",
+    label: "Validate",
+    icon: DocumentValidationIcon,
+    description:
+      "Notice data is reconciled against your GST portal filings, flagging matches and mismatches before you act.",
+  },
+  {
+    key: "analyse",
+    number: "04",
+    label: "Analyse",
+    icon: ChartAnalysisIcon,
+    description:
+      "AI assesses recovery risk and surfaces the legal grounds and precedents relevant to your response.",
+  },
+  {
+    key: "draft",
+    number: "05",
     label: "Draft",
     icon: PencilEdit01Icon,
     description:
       "A draft reply is generated using legal and rule-based reasoning, then routed to you for review, edits and approval.",
   },
   {
+    key: "review",
+    number: "06",
+    label: "Review",
+    icon: UserCheck01Icon,
+    description:
+      "Your reviewer approves, edits or overrides the draft before it's ever sent.",
+  },
+  {
     key: "track",
-    number: "04",
+    number: "07",
     label: "Track",
     icon: Route02Icon,
     description:
       "Hearings, orders, payments and appeals stay tracked in one timeline, end to end.",
   },
 ];
+
+// Orbit geometry: icons sit evenly spaced on a fixed-size ring. On wide
+// screens only the right half of that ring is ever shown (clipped into a
+// half-moon), so exactly 3 icons are visible at a time: the active one at
+// "3 o'clock", with the previous and next stages above and below it.
+// Below the lg breakpoint (a "vertical" layout, stacked instead of
+// side-by-side) the clip is dropped and the anchor moves to "12 o'clock",
+// showing the full ring with all 7 stages at once.
+const ORBIT_SIZE = 300;
+const ORBIT_SIZE_COMPACT = 240;
+
+function orbitAnchor(radius: number, deg: number) {
+  const rad = (deg * Math.PI) / 180;
+  return { x: radius * Math.cos(rad), y: radius * Math.sin(rad) };
+}
 
 function StageBody({ stageKey }: { stageKey: string }) {
   if (stageKey === "ingest") {
@@ -121,7 +163,6 @@ function StageBody({ stageKey }: { stageKey: string }) {
       { label: "Notice type", value: "Section 73" },
       { label: "Issuing authority", value: "CGST Range 4" },
       { label: "Deadline", value: "12 days" },
-      { label: "GST portal match", value: "Confirmed" },
     ];
 
     return (
@@ -131,7 +172,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
           AI classification complete
         </span>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {fields.map((field) => (
             <div
               key={field.label}
@@ -148,8 +189,91 @@ function StageBody({ stageKey }: { stageKey: string }) {
         </div>
 
         <div className="flex items-center gap-2 text-[12.5px] text-ink/55">
+          <HugeiconsIcon icon={Tag01Icon} size={14} strokeWidth={1.8} className="text-primary" />
+          Notice type identified · ready for reconciliation
+        </div>
+      </div>
+    );
+  }
+
+  if (stageKey === "validate") {
+    const rows = [
+      { label: "Filed returns", ok: true },
+      { label: "Turnover figures", ok: true },
+      { label: "ITC claimed", ok: false },
+    ];
+
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <p className="text-[15px] font-semibold text-ink">
+            Reconciled with GST portal
+          </p>
+          <span className="rounded-[3px] bg-lavender-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
+            92% match
+          </span>
+        </div>
+
+        <div className="space-y-2.5">
+          {rows.map((row) => (
+            <div
+              key={row.label}
+              className="flex items-center justify-between rounded-md border border-border bg-neutral-50 p-4"
+            >
+              <span className="text-[13.5px] font-medium text-ink/75">{row.label}</span>
+              <span
+                className={`inline-flex items-center gap-1.5 text-[12.5px] font-medium ${
+                  row.ok ? "text-secondary-dark" : "text-primary"
+                }`}
+              >
+                <HugeiconsIcon
+                  icon={CheckmarkCircle02Icon}
+                  size={14}
+                  strokeWidth={1.8}
+                />
+                {row.ok ? "Match" : "Mismatch"}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 text-[12.5px] text-ink/55">
+          <HugeiconsIcon icon={DocumentValidationIcon} size={14} strokeWidth={1.8} className="text-primary" />
+          1 discrepancy flagged for review before drafting
+        </div>
+      </div>
+    );
+  }
+
+  if (stageKey === "analyse") {
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <p className="text-[15px] font-semibold text-ink">
+            Risk assessment complete
+          </p>
+          <span className="rounded-[3px] bg-neutral-100 px-2.5 py-1 text-[10.5px] font-medium tracking-[0.06em] text-ink/70">
+            Recovery risk: Medium
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 rounded-md border border-border bg-neutral-50 p-5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-primary to-primary-dark text-white">
+            <HugeiconsIcon icon={ChartAnalysisIcon} size={22} strokeWidth={1.8} />
+          </div>
+          <div className="flex-1">
+            <p className="text-[14.5px] font-medium text-ink">
+              3 similar cases resolved favorably
+            </p>
+            <p className="mt-1 text-[12.5px] text-muted">
+              Based on precedent under Section 73, CGST Range 4
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-[12.5px] text-ink/55">
           <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} strokeWidth={1.8} className="text-primary" />
-          All fields validated · ready for next step
+          Legal grounds for response identified
         </div>
       </div>
     );
@@ -187,7 +311,7 @@ function StageBody({ stageKey }: { stageKey: string }) {
         <div className="flex flex-wrap gap-2.5">
           {[
             { label: "Edit draft", icon: PencilEdit01Icon, variant: "secondary" },
-            { label: "Approve & send", icon: CheckmarkCircle02Icon, variant: "primary" },
+            { label: "Send for review", icon: CheckmarkCircle02Icon, variant: "primary" },
             { label: "Regenerate", icon: Exchange01Icon, variant: "secondary" },
           ].map((action) => (
             <span
@@ -202,6 +326,38 @@ function StageBody({ stageKey }: { stageKey: string }) {
               {action.label}
             </span>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (stageKey === "review") {
+    return (
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <p className="text-[15px] font-semibold text-ink">
+            Approved by reviewer
+          </p>
+          <span className="rounded-[3px] bg-lavender-100 px-2.5 py-1 text-[11px] font-medium tracking-[0.06em] text-primary">
+            Ready to file
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4 rounded-md border border-border bg-neutral-50 p-5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
+            <HugeiconsIcon icon={UserCheck01Icon} size={20} strokeWidth={1.8} />
+          </div>
+          <div className="flex-1">
+            <p className="text-[14.5px] font-medium text-ink">Priya Sharma</p>
+            <p className="mt-1 text-[12.5px] text-muted">
+              Consultant · Approved with no edits
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-[12.5px] text-ink/55">
+          <HugeiconsIcon icon={CheckmarkCircle02Icon} size={14} strokeWidth={1.8} className="text-primary" />
+          Full edit history kept for every review
         </div>
       </div>
     );
@@ -270,55 +426,25 @@ function StageBody({ stageKey }: { stageKey: string }) {
   );
 }
 
-const NODE_STYLES = [
-  { bg: "#f4f1fb", border: "#d9cded", icon: "#371e71" },
-  { bg: "#f3ead9", border: "#c9af80", icon: "#a88c5c" },
-  { bg: "#ebe5f6", border: "#5b3f9c", icon: "#371e71" },
-  { bg: "#faf6ee", border: "#c9af80", icon: "#a88c5c" },
-];
-
-// The desktop wheel column (col-span-5 of a 12-col grid) is comfortably
-// wide once the viewport clears xl (1280px), but between lg and xl
-// (1024–1279px) that same column is much narrower, so the wheel needs a
-// smaller radius there to avoid clipping the active node.
-const WHEEL_RADIUS_FULL = 230;
-const WHEEL_NODE_SIZE_FULL = 92;
-const WHEEL_RADIUS_COMPACT = 150;
-const WHEEL_NODE_SIZE_COMPACT = 64;
-const WHEEL_INFO_GAP = 12; // mt-3
-const WHEEL_INFO_HEIGHT = 90;
-
-// Below lg there's no side-by-side room to bleed the wheel off-canvas, so
-// the mobile/tablet wheel is smaller and simply centered — all four nodes
-// stay visible, with distance-based fade doing the decluttering instead.
-const MOBILE_WHEEL_RADIUS = 112;
-const MOBILE_NODE_SIZE = 66;
-// The mobile info text and stage panel sit below the wheel, so the
-// "active" node highlights at 6 o'clock instead of the desktop's 3
-// o'clock, pointing down toward its own content.
-const MOBILE_ACTIVE_SLOT_ANGLE = 90;
-
 export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }) {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
-  const mobilePinRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
-  const isFullWheel = useMediaQuery("(min-width: 1280px)");
+  const [isCompact, setIsCompact] = useState(false);
 
-  const WHEEL_RADIUS = isFullWheel ? WHEEL_RADIUS_FULL : WHEEL_RADIUS_COMPACT;
-  const WHEEL_NODE_SIZE = isFullWheel
-    ? WHEEL_NODE_SIZE_FULL
-    : WHEEL_NODE_SIZE_COMPACT;
-  // How far the wheel's center sits to the right of the column's left
-  // edge — keeps the active + adjacent (top/bottom) nodes visible while
-  // the far/back node clips off-screen, so only three nodes ever show.
-  const WHEEL_CENTER_OFFSET = WHEEL_RADIUS * 0.45;
-  // The right-side stage panel is sized to match the wheel + info column
-  // so both sides end at the same point — otherwise the taller side's
-  // tail hangs below the shorter one right as the pin releases, landing
-  // awkwardly against the next section.
-  const DESKTOP_COLUMN_HEIGHT =
-    WHEEL_RADIUS * 2 + WHEEL_NODE_SIZE + WHEEL_INFO_GAP + WHEEL_INFO_HEIGHT;
+  // Below lg the layout stacks vertically instead of sitting side-by-side
+  // with the panel, so the orbit switches from a half-moon to a full circle.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsCompact(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const orbitSize = isCompact ? ORBIT_SIZE_COMPACT : ORBIT_SIZE;
+  const orbitAnchorDeg = isCompact ? -90 : 0;
+  const anchor = orbitAnchor(orbitSize / 2, orbitAnchorDeg);
 
   const handleCtaClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { gsap } = getGsap();
@@ -328,38 +454,37 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
 
   useEffect(() => {
     if (reducedMotion) return;
-    if (!sectionRef.current) return;
+    if (!sectionRef.current || !pinRef.current) return;
 
-    const { gsap, ScrollTrigger } = getGsap();
     const section = sectionRef.current;
+    const pinTarget = pinRef.current;
+    let ctx: ReturnType<typeof GsapType.context> | null = null;
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
+    // Deferred by a frame so that if this effect fires twice back-to-back
+    // (React StrictMode's dev-only double mount, or two rapid compact/
+    // full-circle toggles from a fast resize), the first build never
+    // actually runs — its cleanup cancels the pending frame before GSAP
+    // is ever touched. Building two overlapping ScrollTrigger pins on the
+    // same target back-to-back was leaving the timeline's opening "active
+    // stage" frame un-rendered (every bubble stuck looking inactive).
+    const rafId = requestAnimationFrame(() => {
+      const { gsap, ScrollTrigger } = getGsap();
+      ctx = gsap.context(() => {
+        buildWorkflowPin(gsap, ScrollTrigger, section, pinTarget);
+      }, section);
+    });
 
-      mm.add("(min-width: 1024px)", () => {
-        if (!pinRef.current) return;
-        buildWorkflowPin(gsap, ScrollTrigger, pinRef.current, pinRef.current);
-      });
-
-      mm.add("(max-width: 1023.98px)", () => {
-        if (!mobilePinRef.current) return;
-        buildWorkflowPin(
-          gsap,
-          ScrollTrigger,
-          mobilePinRef.current,
-          mobilePinRef.current,
-          MOBILE_ACTIVE_SLOT_ANGLE,
-        );
-      });
-
-      return () => mm.revert();
-    }, section);
-
-    return () => ctx.revert();
+    return () => {
+      cancelAnimationFrame(rafId);
+      ctx?.revert();
+    };
+    // Rebuilt whenever the compact/full-circle mode flips so the ring's
+    // rotation targets stay in sync with the new anchor angle instead of
+    // carrying over stale values computed for the other layout.
   }, [reducedMotion]);
 
   const eyebrow = (
-    <span className="mb-2 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
+    <span className="mb-5 inline-flex items-center gap-2 text-[14px] font-medium tracking-[0.14em] text-muted">
       <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
       How it works
     </span>
@@ -387,307 +512,212 @@ export function WorkflowSection({ onRequestDemo }: { onRequestDemo: () => void }
     </button>
   );
 
-  return (
-    <section id="workflow" ref={sectionRef} className="py-24 lg:py-0">
-      {!reducedMotion && (
-        <div ref={pinRef} className="hidden lg:block">
-          <div className="mx-auto max-w-[1360px] px-10 pb-24 pt-16">
-            {eyebrow}
-            {headline}
-            <div className="mb-6">{cta}</div>
-            <div className="grid w-full grid-cols-12 gap-8 xl:gap-16">
-              <div className="col-span-5 flex flex-col justify-center">
-                <div
-                  className="relative w-full overflow-hidden"
-                  style={{ height: WHEEL_RADIUS * 2 + WHEEL_NODE_SIZE }}
-                >
-                  <div
-                    data-workflow="wheel"
-                    className="absolute"
-                    style={{
-                      left: WHEEL_CENTER_OFFSET - WHEEL_RADIUS,
-                      top: "50%",
-                      marginTop: -WHEEL_RADIUS,
-                      height: WHEEL_RADIUS * 2,
-                      width: WHEEL_RADIUS * 2,
-                    }}
-                  >
-                    <svg
-                      aria-hidden
-                      className="absolute inset-0"
-                      viewBox={`0 0 ${WHEEL_RADIUS * 2} ${WHEEL_RADIUS * 2}`}
-                    >
-                      <circle
-                        cx={WHEEL_RADIUS}
-                        cy={WHEEL_RADIUS}
-                        r={WHEEL_RADIUS - 1}
-                        fill="none"
-                        stroke="#d9cded"
-                        strokeWidth={1.5}
-                        strokeDasharray="7 9"
-                      />
-                    </svg>
-                    {STAGES.map((stage, i) => {
-                      const angle = i * (360 / STAGES.length);
-                      const nodeSize = WHEEL_NODE_SIZE;
-                      const style = NODE_STYLES[i % NODE_STYLES.length];
-                      return (
-                        <div
-                          key={stage.key}
-                          className="absolute"
-                          style={{
-                            left: "50%",
-                            top: "50%",
-                            width: nodeSize,
-                            height: nodeSize,
-                            marginLeft: -nodeSize / 2,
-                            marginTop: -nodeSize / 2,
-                            transform: `rotate(${angle}deg) translate(${WHEEL_RADIUS}px) rotate(${-angle}deg)`,
-                          }}
-                        >
-                          <div
-                            data-workflow="wheel-node"
-                            className="h-full w-full"
-                          >
-                            <div
-                              data-workflow="wheel-node-inner"
-                              className="flex h-full w-full items-center justify-center rounded-full border shadow-[0_8px_20px_-10px_rgba(24,21,31,0.35)]"
-                              style={{
-                                backgroundColor: style.bg,
-                                borderColor: style.border,
-                              }}
-                            >
-                              <HugeiconsIcon
-                                icon={stage.icon}
-                                size={26}
-                                strokeWidth={1.8}
-                                color={style.icon}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div
-                  className="relative"
-                  style={{ marginTop: WHEEL_INFO_GAP, height: WHEEL_INFO_HEIGHT }}
-                >
-                  {STAGES.map((stage, i) => (
-                    <div
-                      key={stage.key}
-                      data-workflow="info"
-                      className="absolute inset-x-0 top-0"
-                      style={{ opacity: i === 0 ? 1 : 0 }}
-                    >
-                      <p className="text-[11px] font-medium tracking-[0.08em] text-muted">
-                        {stage.number}
-                      </p>
-                      <p className="mt-1 text-[20px] font-semibold text-ink">
-                        {stage.label}
-                      </p>
-                      <p className="mt-2 max-w-[380px] text-[14.5px] leading-relaxed text-ink/60">
-                        {stage.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="col-span-7 flex items-center">
-                <div
-                  className="relative w-full overflow-hidden rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-8 shadow-[0_1px_2px_rgba(24,21,31,0.04),0_32px_64px_-28px_rgba(24,21,31,0.22)]"
-                  style={{ height: DESKTOP_COLUMN_HEIGHT }}
-                >
-                  <div
-                    data-workflow="progress-bar"
-                    className="absolute left-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary-soft transition-[width] duration-700"
-                    style={{ width: "25%" }}
-                  />
-
-                  {STAGES.map((stage, i) => (
-                    <div
-                      key={stage.key}
-                      data-workflow="panel"
-                      className="absolute inset-8 top-10 flex items-center"
-                      style={{ opacity: i === 0 ? 1 : 0 }}
-                    >
-                      <div className="w-full">
-                        <StageBody stageKey={stage.key} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+  if (reducedMotion) {
+    return (
+      <section id="workflow" ref={sectionRef} className="py-24">
+        <div className="mx-auto max-w-[1360px] px-6 pb-16 lg:px-10">
+          {eyebrow}
+          {headline}
+          {cta}
         </div>
-      )}
-
-      {!reducedMotion && (
-        <div ref={mobilePinRef} className="lg:hidden">
-          <div className="mx-auto max-w-[560px] px-6 pb-16 pt-16">
-            {eyebrow}
-            {headline}
-            <div className="mb-8">{cta}</div>
-
+        <div className="mx-auto flex max-w-[1360px] flex-col gap-6 px-6 lg:px-10">
+          {STAGES.map((stage) => (
             <div
-              className="relative mx-auto"
-              style={{
-                width: MOBILE_WHEEL_RADIUS * 2 + MOBILE_NODE_SIZE,
-                height: MOBILE_WHEEL_RADIUS * 2 + MOBILE_NODE_SIZE,
-              }}
+              key={stage.key}
+              className="rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-6"
             >
-              <div
-                data-workflow="wheel"
-                className="absolute"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  marginLeft: -MOBILE_WHEEL_RADIUS,
-                  marginTop: -MOBILE_WHEEL_RADIUS,
-                  height: MOBILE_WHEEL_RADIUS * 2,
-                  width: MOBILE_WHEEL_RADIUS * 2,
-                }}
-              >
-                <svg
-                  aria-hidden
-                  className="absolute inset-0"
-                  viewBox={`0 0 ${MOBILE_WHEEL_RADIUS * 2} ${MOBILE_WHEEL_RADIUS * 2}`}
-                >
-                  <circle
-                    cx={MOBILE_WHEEL_RADIUS}
-                    cy={MOBILE_WHEEL_RADIUS}
-                    r={MOBILE_WHEEL_RADIUS - 1}
-                    fill="none"
-                    stroke="#d9cded"
-                    strokeWidth={1.5}
-                    strokeDasharray="6 8"
-                  />
-                </svg>
-                {STAGES.map((stage, i) => {
-                  const angle = i * (360 / STAGES.length);
-                  const nodeSize = MOBILE_NODE_SIZE;
-                  const style = NODE_STYLES[i % NODE_STYLES.length];
-                  return (
-                    <div
-                      key={stage.key}
-                      className="absolute"
-                      style={{
-                        left: "50%",
-                        top: "50%",
-                        width: nodeSize,
-                        height: nodeSize,
-                        marginLeft: -nodeSize / 2,
-                        marginTop: -nodeSize / 2,
-                        transform: `rotate(${angle}deg) translate(${MOBILE_WHEEL_RADIUS}px) rotate(${-angle}deg)`,
-                      }}
-                    >
-                      <div data-workflow="wheel-node" className="h-full w-full">
-                        <div
-                          data-workflow="wheel-node-inner"
-                          className="flex h-full w-full items-center justify-center rounded-full border shadow-[0_6px_16px_-8px_rgba(24,21,31,0.35)]"
-                          style={{
-                            backgroundColor: style.bg,
-                            borderColor: style.border,
-                          }}
-                        >
-                          <HugeiconsIcon
-                            icon={stage.icon}
-                            size={18}
-                            strokeWidth={1.8}
-                            color={style.icon}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="relative mx-auto mt-5 h-[104px] max-w-[380px] text-center">
-              {STAGES.map((stage, i) => (
-                <div
-                  key={stage.key}
-                  data-workflow="info"
-                  className="absolute inset-x-0 top-0"
-                  style={{ opacity: i === 0 ? 1 : 0 }}
-                >
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
+                  <HugeiconsIcon icon={stage.icon} size={15} strokeWidth={1.8} />
+                </div>
+                <div>
                   <p className="text-[11px] font-medium tracking-[0.08em] text-muted">
                     {stage.number}
                   </p>
-                  <p className="mt-1 text-[19px] font-semibold text-ink">
+                  <p className="text-[15px] font-medium text-ink">
                     {stage.label}
                   </p>
-                  <p className="mt-2 text-[14px] leading-relaxed text-ink/60">
-                    {stage.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="relative mt-8 h-[340px] w-full overflow-hidden rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-6 shadow-[0_1px_2px_rgba(24,21,31,0.04),0_24px_48px_-24px_rgba(24,21,31,0.2)]">
-              <div
-                data-workflow="progress-bar"
-                className="absolute left-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary-soft transition-[width] duration-700"
-                style={{ width: "25%" }}
-              />
-
-              {STAGES.map((stage, i) => (
-                <div
-                  key={stage.key}
-                  data-workflow="panel"
-                  className="absolute inset-6 top-8"
-                  style={{ opacity: i === 0 ? 1 : 0 }}
-                >
-                  <StageBody stageKey={stage.key} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {reducedMotion && (
-        <div>
-          <div className="mx-auto max-w-[1360px] px-6 pb-16 lg:px-10">
-            {eyebrow}
-            {headline}
-            {cta}
-          </div>
-          <div className="mx-auto flex max-w-[1360px] flex-col gap-6 px-6 lg:px-10">
-            {STAGES.map((stage) => (
-              <div
-                key={stage.key}
-                className="rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-6"
-              >
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
-                    <HugeiconsIcon icon={stage.icon} size={15} strokeWidth={1.8} />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-medium tracking-[0.08em] text-muted">
-                      {stage.number}
-                    </p>
-                    <p className="text-[15px] font-medium text-ink">
-                      {stage.label}
-                    </p>
-                  </div>
-                </div>
-                <p className="mb-5 text-[14px] leading-relaxed text-ink/60">
-                  {stage.description}
-                </p>
-                <div className="rounded-md border border-border bg-neutral-50/50 p-5">
-                  <StageBody stageKey={stage.key} />
                 </div>
               </div>
-            ))}
+              <p className="mb-5 text-[14px] leading-relaxed text-ink/60">
+                {stage.description}
+              </p>
+              <div className="rounded-md border border-border bg-neutral-50/50 p-5">
+                <StageBody stageKey={stage.key} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id="workflow" ref={sectionRef} className="py-24 lg:py-0">
+      <div ref={pinRef}>
+        <div className="mx-auto max-w-[1360px] px-6 pb-16 pt-20 lg:px-10">
+          {eyebrow}
+          {headline}
+          <div className="mb-8">{cta}</div>
+          <div className="grid w-full grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-4">
+              {/* Orbit: a dashed ring holding all 7 stage icons, evenly
+                  spaced. On wide screens only the right half is shown
+                  (clipped into a half-moon) so exactly 3 icons are visible
+                  at once, the active one at "3 o'clock". Below lg, where
+                  this column stacks above the panel instead of sitting
+                  beside it, the clip is dropped and the anchor moves to
+                  "12 o'clock" so the full ring — all 7 stages — is always
+                  visible. The ring rotates (via buildWorkflowPin) so the
+                  active stage always lands at the anchor and grows into
+                  the large "current" bubble. */}
+              <div
+                className="relative mb-4 overflow-hidden"
+                style={{ height: isCompact ? orbitSize + 20 : ORBIT_SIZE }}
+              >
+                <div
+                  className="absolute"
+                  style={{
+                    left: isCompact ? "50%" : "8%",
+                    top: "50%",
+                    width: orbitSize,
+                    height: orbitSize,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  {/* Static window — never rotates, so the visible shape
+                      stays clean regardless of how the icons have spun. */}
+                  <div
+                    className="absolute inset-0"
+                    style={isCompact ? undefined : { clipPath: "inset(0 -40px 0 50%)" }}
+                  >
+                    {/* The dashed track itself never moves — only the
+                        icons animate around it — so it reads as a fixed
+                        rail rather than something that's spinning. */}
+                    <div
+                      className="absolute inset-0 rounded-full border-2 border-dashed"
+                      style={{ borderColor: "rgba(55,30,113,0.3)" }}
+                    />
+                    <div data-workflow="orbit-ring" className="absolute inset-0">
+                      {STAGES.map((stage, i) => {
+                        const angle =
+                          ((orbitAnchorDeg + i * (360 / STAGES.length)) * Math.PI) / 180;
+                        const x = (orbitSize / 2) * Math.cos(angle);
+                        const y = (orbitSize / 2) * Math.sin(angle);
+                        return (
+                          <div
+                            key={stage.key}
+                            className="absolute"
+                            style={{
+                              left: `calc(50% + ${x}px)`,
+                              top: `calc(50% + ${y}px)`,
+                              transform: "translate(-50%, -50%)",
+                            }}
+                          >
+                            <div
+                              data-workflow="orbit-bubble"
+                              className="flex items-center justify-center rounded-full shadow-[0_1px_2px_rgba(24,21,31,0.06),0_8px_16px_-8px_rgba(24,21,31,0.2)] transition-colors"
+                              style={{
+                                height: 44,
+                                width: 44,
+                                backgroundColor: i === 0 ? "#ebe5f6" : "#f3ead9",
+                                color: i === 0 ? "#371e71" : "#a88c5c",
+                                transform: i === 0 ? "scale(1.6)" : "scale(1)",
+                              }}
+                            >
+                              <HugeiconsIcon icon={stage.icon} size={16} strokeWidth={1.8} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Fixed at the anchor point on wide screens — outside
+                      the clipped, rotating ring — so it never spins or
+                      gets clipped, just cross-fades between stage names.
+                      Below lg the full circle has no single "gap toward
+                      the panel" to sit in, so the caption renders as its
+                      own centered row beneath the ring instead (see
+                      isCompact block further down). */}
+                  {!isCompact && (
+                    <div
+                      className="absolute"
+                      style={{
+                        left: `calc(50% + ${anchor.x}px)`,
+                        top: `calc(50% + ${anchor.y}px)`,
+                        transform: "translate(40px, -50%)",
+                      }}
+                    >
+                      <div className="relative h-[24px]">
+                        {STAGES.map((stage, i) => (
+                          <span
+                            key={stage.key}
+                            data-workflow="caption"
+                            className="absolute left-0 top-0 whitespace-nowrap text-[16px] font-semibold text-ink"
+                            style={{ opacity: i === 0 ? 1 : 0 }}
+                          >
+                            {stage.label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {isCompact && (
+                <div className="relative mb-2 h-[24px] text-center">
+                  {STAGES.map((stage, i) => (
+                    <span
+                      key={stage.key}
+                      data-workflow="caption"
+                      className="absolute inset-x-0 top-0 whitespace-nowrap text-[16px] font-semibold text-ink"
+                      style={{ opacity: i === 0 ? 1 : 0 }}
+                    >
+                      {stage.label}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="relative mt-2 h-[90px]">
+                {STAGES.map((stage, i) => (
+                  <p
+                    key={stage.key}
+                    data-workflow="description"
+                    className="absolute inset-x-0 top-0 mx-auto max-w-[360px] text-[14.5px] leading-relaxed text-ink/60 lg:mx-0"
+                    style={{ opacity: i === 0 ? 1 : 0 }}
+                  >
+                    {stage.description}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center lg:col-span-8">
+              <div className="relative h-[440px] w-full overflow-hidden rounded-lg border border-border bg-gradient-to-br from-white to-lavender-50 p-5 shadow-[0_1px_2px_rgba(24,21,31,0.04),0_32px_64px_-28px_rgba(24,21,31,0.22)] sm:p-8">
+                <div
+                  data-workflow="progress-bar"
+                  className="absolute left-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary-soft transition-[width] duration-700"
+                  style={{ width: "25%" }}
+                />
+
+                {STAGES.map((stage, i) => (
+                  <div
+                    key={stage.key}
+                    data-workflow="panel"
+                    className="absolute inset-5 top-8 sm:inset-8 sm:top-10"
+                    style={{ opacity: i === 0 ? 1 : 0 }}
+                  >
+                    <StageBody stageKey={stage.key} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }

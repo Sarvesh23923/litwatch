@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight02Icon,
+  ChartAnalysisIcon,
+  DocumentValidationIcon,
   LegalDocument01Icon,
   PencilEdit01Icon,
   Route02Icon,
   Tag01Icon,
+  UserCheck01Icon,
 } from "@hugeicons/core-free-icons";
 import { getGsap } from "@/lib/gsap";
 import { revealOnScroll } from "@/animations/scrollReveal";
@@ -16,7 +19,10 @@ import { spawnRipple } from "@/animations/microInteractions";
 const STAGES = [
   { label: "Ingest", icon: LegalDocument01Icon },
   { label: "Classify", icon: Tag01Icon },
+  { label: "Validate", icon: DocumentValidationIcon },
+  { label: "Analyse", icon: ChartAnalysisIcon },
   { label: "Draft", icon: PencilEdit01Icon },
+  { label: "Review", icon: UserCheck01Icon },
   { label: "Track", icon: Route02Icon },
 ];
 
@@ -50,81 +56,75 @@ export function FinalCTA({ onRequestDemo }: { onRequestDemo: () => void }) {
   };
 
   return (
-    <section className="py-24 lg:py-32">
+    <section className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-[1360px] px-6 lg:px-10">
-        <div
-          data-finalcta="item"
-          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-primary-dark px-6 py-16 text-center sm:px-12 sm:py-20"
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px)",
-              backgroundSize: "22px 22px",
-              maskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%)",
-              WebkitMaskImage:
-                "radial-gradient(ellipse 70% 60% at 50% 0%, black 0%, transparent 75%)",
-            }}
-          />
+        <div className="mx-auto max-w-[640px] text-center">
+          <h2 data-finalcta="item" className="text-[32px] font-semibold leading-[1.15] tracking-[-0.015em] text-ink sm:text-[40px]">
+            Ready for your AI co-pilot?
+          </h2>
+          <p data-finalcta="item" className="mt-4 text-[16px] leading-relaxed text-ink/60">
+            Bring GST notice management into one controlled workflow.
+          </p>
 
-          <div className="relative mx-auto max-w-[640px]">
-            <span className="mb-4 inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.14em] text-white/60">
-              <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-              Get started
-            </span>
-            <h2 className="text-[32px] font-semibold leading-[1.15] tracking-[-0.015em] text-white sm:text-[40px]">
-              Ready for your AI co-pilot?
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-white/70">
-              Bring GST notice management into one controlled workflow.
-            </p>
+          <div data-finalcta="item" className="mt-9 flex flex-wrap items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={(e) => handleCtaClick(e, "rgba(201,175,128,0.45)", onRequestDemo)}
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-primary bg-primary px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              Request a demo
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                size={16}
+                strokeWidth={2}
+                className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+              />
+            </button>
+            <a
+              href="#workflow"
+              onClick={(e) => handleCtaClick(e, "rgba(55,30,113,0.1)")}
+              className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-ink/15 px-[15px] py-[10px] text-[14.5px] font-medium text-ink transition-colors hover:border-primary hover:bg-lavender-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              See how it works
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                size={16}
+                strokeWidth={2}
+                className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+              />
+            </a>
+          </div>
+        </div>
 
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-              <button
-                type="button"
-                onClick={(e) => handleCtaClick(e, "rgba(201,175,128,0.45)", onRequestDemo)}
-                className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] bg-white px-[15px] py-[10px] text-[14.5px] font-medium text-primary transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-              >
-                Request a demo
-                <HugeiconsIcon
-                  icon={ArrowRight02Icon}
-                  size={16}
-                  strokeWidth={2}
-                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-                />
-              </button>
-              <a
-                href="#workflow"
-                onClick={(e) => handleCtaClick(e, "rgba(255,255,255,0.25)")}
-                className="group relative inline-flex h-[39px] items-center gap-[10px] overflow-hidden rounded-[11.7px] border border-white/25 px-[15px] py-[10px] text-[14.5px] font-medium text-white transition-colors duration-200 hover:border-white/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-              >
-                See how it works
-                <HugeiconsIcon
-                  icon={ArrowRight02Icon}
-                  size={16}
-                  strokeWidth={2}
-                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-                />
-              </a>
-            </div>
+        {/* Simplified workflow visual — no gradient background. Two rows
+            (4 over 3, the bottom one centered and reading right to left)
+            so all 7 stages stay legible instead of cramming into one row. */}
+        <div data-finalcta="item" className="mx-auto mt-16 max-w-[560px]">
+          <div className="flex items-center">
+            {STAGES.slice(0, 4).map((stage, i, arr) => (
+              <div key={stage.label} className="flex flex-1 items-center last:flex-none">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-primary">
+                    <HugeiconsIcon icon={stage.icon} size={18} strokeWidth={1.8} />
+                  </div>
+                  <span className="text-[11.5px] font-medium text-ink/60">{stage.label}</span>
+                </div>
+                {i < arr.length - 1 && <div className="mx-2 mb-5 h-px flex-1 bg-border" />}
+              </div>
+            ))}
           </div>
 
-          <div className="relative mx-auto mt-16 flex max-w-[640px] items-center">
-            {STAGES.map((stage, i) => (
-              <div key={stage.label} className="flex flex-1 items-center last:flex-none">
-                <div className="flex flex-col items-center gap-2.5">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-sm">
-                    <HugeiconsIcon icon={stage.icon} size={28} strokeWidth={1.6} />
+          <div className="mx-auto mt-3 flex w-3/4 flex-row-reverse items-center">
+            {STAGES.slice(4).map((stage, i, arr) => (
+              <Fragment key={stage.label}>
+                <div className="flex flex-none flex-col items-center gap-2">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white text-primary">
+                    <HugeiconsIcon icon={stage.icon} size={18} strokeWidth={1.8} />
                   </div>
-                  <span className="text-[12.5px] font-medium text-white/60">{stage.label}</span>
+                  <span className="text-[11.5px] font-medium text-ink/60">{stage.label}</span>
                 </div>
-                {i < STAGES.length - 1 && (
-                  <div className="mx-2 mb-6 h-px flex-1 bg-white/15" />
-                )}
-              </div>
+                {i < arr.length - 1 && <div className="mx-2 mb-5 h-px flex-1 bg-border" />}
+              </Fragment>
             ))}
           </div>
         </div>

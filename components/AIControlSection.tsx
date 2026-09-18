@@ -199,10 +199,10 @@ export function AIControlSection() {
                   className="h-1 w-1/3 bg-gradient-to-r from-primary to-secondary transition-all duration-700"
                 />
 
-                <div className="p-8">
-                  <div className="mb-6 flex items-center justify-between">
+                <div className="p-5 sm:p-8">
+                  <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-cream-100">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-cream-100">
                         <HugeiconsIcon icon={AiMagicIcon} size={20} strokeWidth={2} className="text-primary" />
                       </div>
                       <div>
@@ -212,8 +212,8 @@ export function AIControlSection() {
                         <p className="text-[12px] text-ink/60">Section 73 notice</p>
                       </div>
                     </div>
-                    
-                    <div className="relative h-[28px] w-[180px]">
+
+                    <div className="relative h-[28px] w-[160px] shrink-0 sm:w-[180px]">
                       <span
                         data-control="tag"
                         data-stage="0"
@@ -260,7 +260,7 @@ export function AIControlSection() {
                     <div className="h-2.5 w-[82%] rounded-full bg-neutral-100" />
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between rounded-lg border border-border bg-neutral-50 p-4">
+                  <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-neutral-50 p-4">
                     <div className="flex items-center gap-3">
                       <div
                         data-control="ai-badge"
