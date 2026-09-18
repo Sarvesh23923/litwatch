@@ -127,11 +127,11 @@ function StageBody({ stageKey }: { stageKey: string }) {
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-primary to-primary-dark text-white">
             <HugeiconsIcon icon={LegalDocument01Icon} size={22} strokeWidth={1.8} />
           </div>
-          <div className="flex-1">
-            <p className="text-[14.5px] font-medium text-ink">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[14.5px] font-medium text-ink">
               Notice_ABC_Industries.pdf
             </p>
-            <p className="mt-1 text-[12.5px] text-muted">
+            <p className="mt-1 truncate text-[12.5px] text-muted">
               Client: ABC Industries · Received today, 10:42 AM
             </p>
           </div>

@@ -129,7 +129,7 @@ export function TrustSection() {
             data-trust="item"
             className="col-span-12 overflow-hidden rounded-lg border border-border bg-white lg:col-span-8"
           >
-            <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-y-0">
+            <div className="grid grid-cols-1 divide-y divide-border sm:grid-cols-2 sm:divide-y-0">
               {PILLARS.map((pillar, i) => (
                 <div
                   key={pillar.title}

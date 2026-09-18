@@ -140,6 +140,7 @@ export function ProblemSection() {
   const visualRef = useRef<HTMLDivElement>(null);
   const visualWrapRef = useRef<HTMLDivElement>(null);
   const [visualScale, setVisualScale] = useState(1);
+  const [clusterShift, setClusterShift] = useState(0);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -158,11 +159,26 @@ export function ProblemSection() {
   }, []);
 
   useEffect(() => {
+    const DESIGN_WIDTH = 680;
+    const DESIGN_HEIGHT = 520;
+
     const updateScale = () => {
       const width = window.innerWidth;
       const nextScale =
         width < 420 ? 0.62 : width < 520 ? 0.72 : width < 768 ? 0.82 : 1;
       setVisualScale(nextScale);
+
+      // Below the design width, the wrapper reserves extra height (min-height
+      // scaled off the full design) so the canvas doesn't look squashed, but
+      // that leaves dead space above/below the shrunk canvas. Pull the
+      // fragments + center card up into that space; the before/after pill
+      // stays put since it isn't part of the shifted cluster.
+      const containerWidth = visualWrapRef.current?.clientWidth ?? DESIGN_WIDTH;
+      const gap =
+        nextScale < 1
+          ? Math.max(0, (DESIGN_HEIGHT / 2) * (1 - containerWidth / DESIGN_WIDTH))
+          : 0;
+      setClusterShift(Math.round(gap * 0.85));
     };
 
     updateScale();
@@ -200,7 +216,7 @@ export function ProblemSection() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-8 sm:gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-12">
+        <div className="mt-8 grid grid-cols-1 gap-8 sm:gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
             <div className="grid gap-3 sm:gap-4 lg:gap-5">
               {PROBLEMS.map((problem, index) => (
@@ -278,7 +294,7 @@ export function ProblemSection() {
               <div
                 ref={visualRef}
                 data-problem="visual"
-                className="relative aspect-[680/520] w-full max-w-[680px] shrink-0 origin-center"
+                className="relative aspect-[680/520] w-full max-w-[680px] shrink-0 origin-center [container-type:inline-size]"
                 style={{
                   transform: `scale(${visualScale})`,
                   transformOrigin: "center center",
@@ -293,70 +309,75 @@ export function ProblemSection() {
                   }}
                 />
 
-              {FRAGMENTS.map((frag) => (
-                <div
-                  key={frag.key}
-                  data-problem="fragment"
-                  data-dx={frag.dx}
-                  data-dy={frag.dy}
-                  style={{
-                    top: `${(frag.top / 520) * 100}%`,
-                    left: `${(frag.left / 680) * 100}%`,
-                    transform: `rotate(${frag.rotate}deg)`,
-                    width: "clamp(110px, 27vw, 190px)",
-                  }}
-                  className="absolute flex items-center gap-3 rounded-lg border border-border bg-white px-3 py-2 shadow-[0_4px_12px_-4px_rgba(24,21,31,0.1),0_20px_40px_-20px_rgba(24,21,31,0.15)] backdrop-blur-sm transition-shadow hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.2)] sm:px-4 sm:py-3.5"
-                >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-neutral-50 to-neutral-100">
-                    <HugeiconsIcon
-                      icon={frag.icon}
-                      size={18}
-                      strokeWidth={1.8}
-                      className={frag.color}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="block truncate text-[11.5px] font-medium text-ink sm:text-[13px]">
-                      {frag.label}
-                    </span>
-                    {frag.badge && (
-                      <span className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-[8px] font-semibold text-red-700 sm:text-[9px]">
-                        <HugeiconsIcon icon={Alert01Icon} size={9} strokeWidth={2.4} />
-                        {frag.badge}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-
               <div
-                className="absolute flex items-center justify-center"
-                style={{ top: "32.7%", left: "29.4%", width: "41.2%", height: "34.6%" }}
+                className="absolute inset-0"
+                style={{ transform: `translateY(-${clusterShift}px)` }}
               >
-                <div
-                  data-problem="target-outline"
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/30 bg-lavender-50/30"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" />
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.2s" }} />
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.4s" }} />
+                {FRAGMENTS.map((frag) => (
+                  <div
+                    key={frag.key}
+                    data-problem="fragment"
+                    data-dx={frag.dx}
+                    data-dy={frag.dy}
+                    style={{
+                      top: `${(frag.top / 520) * 100}%`,
+                      left: `${(frag.left / 680) * 100}%`,
+                      transform: `rotate(${frag.rotate}deg)`,
+                      width: "clamp(76px, 27cqw, 190px)",
+                    }}
+                    className="absolute flex items-center gap-3 rounded-lg border border-border bg-white px-3 py-2 shadow-[0_4px_12px_-4px_rgba(24,21,31,0.1),0_20px_40px_-20px_rgba(24,21,31,0.15)] backdrop-blur-sm transition-shadow hover:shadow-[0_8px_24px_-8px_rgba(24,21,31,0.2)] sm:px-4 sm:py-3.5"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-neutral-50 to-neutral-100">
+                      <HugeiconsIcon
+                        icon={frag.icon}
+                        size={18}
+                        strokeWidth={1.8}
+                        className={frag.color}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="block truncate text-[11.5px] font-medium text-ink sm:text-[13px]">
+                        {frag.label}
+                      </span>
+                      {frag.badge && (
+                        <span className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-red-100 px-1.5 py-0.5 text-[8px] font-semibold text-red-700 sm:text-[9px]">
+                          <HugeiconsIcon icon={Alert01Icon} size={9} strokeWidth={2.4} />
+                          {frag.badge}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <span className="text-[12px] font-medium text-primary/50">
-                    Centralizing...
-                  </span>
-                </div>
+                ))}
+
                 <div
-                  data-problem="target-solid"
-                  className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-4 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
+                  className="absolute flex items-center justify-center"
+                  style={{ top: "32.7%", left: "29.4%", width: "41.2%", height: "34.6%" }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/logo.svg" alt="Litwatch" className="h-11 w-auto" />
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                    <span className="text-[12px] font-medium text-green-700">
-                      All notices unified
+                  <div
+                    data-problem="target-outline"
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/30 bg-lavender-50/30"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" />
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.2s" }} />
+                      <div className="h-2 w-2 animate-pulse rounded-full bg-primary/40" style={{ animationDelay: "0.4s" }} />
+                    </div>
+                    <span className="text-[12px] font-medium text-primary/50">
+                      Centralizing...
                     </span>
+                  </div>
+                  <div
+                    data-problem="target-solid"
+                    className="absolute inset-0 flex scale-95 flex-col items-center justify-center gap-4 rounded-xl border-2 border-primary bg-gradient-to-br from-white to-lavender-50 opacity-0 shadow-[0_24px_48px_-24px_rgba(55,30,113,0.4),0_0_0_1px_rgba(55,30,113,0.08)_inset]"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/logo.svg" alt="Litwatch" className="h-11 w-auto" />
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                      <span className="text-[12px] font-medium text-green-700">
+                        All notices unified
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

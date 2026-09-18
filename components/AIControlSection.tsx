@@ -95,7 +95,7 @@ export function AIControlSection() {
           <span className="text-primary">You stay in control.</span>
         </h2>
 
-        <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-10">
+        <div className="mt-16 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-3">
             <div className="mb-6 flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-lavender-100 to-lavender-200">
@@ -290,7 +290,7 @@ export function AIControlSection() {
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
                 {[
                   { step: "1", label: "AI generates", icon: SparklesIcon, active: true },
                   { step: "2", label: "You review & edit", icon: PencilEdit01Icon, active: false },

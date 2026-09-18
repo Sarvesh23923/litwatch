@@ -42,17 +42,19 @@ export function buildProblemScroll(
     ease: "back.out(1.2)",
   }, 0.2);
 
+  const DESIGN_WIDTH = 680;
+
   fragments.forEach((frag, i) => {
     const dx = Number(frag.dataset.dx ?? 0);
     const dy = Number(frag.dataset.dy ?? 0);
-    
+
     const stagger = i * 0.08;
-    
+
     tl.to(
       frag,
       {
-        x: dx,
-        y: dy,
+        x: () => dx * (visual.offsetWidth / DESIGN_WIDTH),
+        y: () => dy * (visual.offsetWidth / DESIGN_WIDTH),
         rotate: 0,
         scale: 0.75,
         opacity: 0,

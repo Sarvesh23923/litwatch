@@ -73,7 +73,7 @@ export function Hero({ onRequestDemo }: { onRequestDemo: () => void }) {
         }}
       />
 
-      <div className="relative mx-auto grid max-w-[1360px] gap-16 px-6 lg:grid-cols-12 lg:gap-8 lg:px-10">
+      <div className="relative mx-auto grid max-w-[1360px] grid-cols-1 gap-16 px-6 lg:grid-cols-12 lg:gap-8 lg:px-10">
         <div className="flex flex-col justify-center lg:col-span-5">
           <span
             data-hero="eyebrow"

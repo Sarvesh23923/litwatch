@@ -69,7 +69,7 @@ export function buildWorkflowPin(
       const fade = gsap.utils.clamp(0, 1, (neighborCutoff - dist) / fadeWidth);
       const opacity = baseOpacity * fade;
       gsap.set(node, { scale, opacity });
-      gsap.set(nodeInners[i], { rotate: -total });
+      gsap.set(nodeInners[i], { rotate: -rotation });
     });
 
     // Hold each stage fully visible for most of its dwell and only blend
@@ -208,7 +208,7 @@ export function buildWorkflowAutoRotate(
         gsap.set(node, { scale, opacity: 1 });
       }
 
-      gsap.set(nodeInners[i], { rotate: -total });
+      gsap.set(nodeInners[i], { rotate: -rotation });
     });
 
     const crossStart = 0.72;

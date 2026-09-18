@@ -66,13 +66,16 @@ export function NoticeJourneyCard() {
       </div>
 
       {/* Stepper */}
-      <div className="mb-8 flex items-start">
+      <div className="mb-8 flex items-start [container-type:inline-size]">
         {STAGES.map((stage, i) => (
           <div key={stage.key} className="flex flex-1 items-start last:flex-none">
-            <div className="flex w-[38px] flex-col items-center gap-1.5">
+            <div
+              className="flex flex-col items-center gap-1.5"
+              style={{ width: "clamp(26px, 12.5cqw, 38px)" }}
+            >
               <div
                 data-journey="dot"
-                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors"
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors sm:h-6 sm:w-6"
                 style={{
                   backgroundColor: i === 0 ? "#f4f1fb" : "#ffffff",
                   borderColor: i === 0 ? "#371e71" : "#e4e0e8",
@@ -81,12 +84,12 @@ export function NoticeJourneyCard() {
               >
                 <HugeiconsIcon icon={stage.icon} size={11} strokeWidth={2} />
               </div>
-              <span className="text-center text-[9px] font-medium leading-tight tracking-[0.04em] text-muted">
+              <span className="break-words text-center text-[9px] font-medium leading-tight tracking-[0.04em] text-muted">
                 {stage.label}
               </span>
             </div>
             {i < STAGES.length - 1 && (
-              <div className="relative mx-1 mt-3 h-px flex-1 bg-border">
+              <div className="relative mx-0.5 mt-3 h-px flex-1 bg-border sm:mx-1">
                 <div
                   data-journey="connector-fill"
                   className="absolute inset-y-0 left-0 h-px w-full origin-left scale-x-0 bg-primary"
